@@ -1,0 +1,46 @@
+# CatNip — files CatNip generates that the project does not need to run.
+# Kept on purpose: the .catnip, every .md and .py, block_code/, doc_images/, temp/.
+
+# Python interpreter caches and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Run profiles (Run Engine → Profile)
+.catnip/
+
+# Volatile Memory values saved by generated source
+.catnip_memory/
+
+# Compile staging, native executables and their manifest (catnip_build.json)
+build/
+
+# Editor state: block metadata and breakpoints
+*.bkpmeta
+*.breakpoints.json
+breakpoints.json
+
+# Half-written saves left by an interrupted write
+.*.tmp
+
+# Input data: the demo set is generated on the first run (DemoCostData),
+# and real company data put here must never reach the repository.
+/input/
+
+# Run results
+/output/
+
+# Local settings and secrets
+.env
+.env.*
+
+# IDE / OS clutter
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store

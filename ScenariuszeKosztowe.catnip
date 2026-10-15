@@ -1,0 +1,1307 @@
+{
+  "nodes": [
+    {
+      "nodeData": {
+        "codeText": "import glob\nimport os\n\n\nclass ProjectFolders:\n    \u0022\u0022\u0022Folder projektu (ten z plikiem .catnip) i jego podfoldery: input/ na dane, output/ na wyniki.\n\n    Dzia\u0142a tak samo lokalnie i w Dockerze (/app), bo szuka pliku .catnip, a nie \u015Bcie\u017Cki z dysku C:.\n    \u0022\u0022\u0022\n\n    def __init__(self, input_name: str = \u0022input\u0022, output_name: str = \u0022output\u0022):\n        self.root = self.find_root()\n        self.input_dir = os.path.join(self.root, input_name)\n        self.output_dir = os.path.join(self.root, output_name)\n        os.makedirs(self.input_dir, exist_ok=True)\n        os.makedirs(self.output_dir, exist_ok=True)\n\n    def folders(self) -\u003E \u0022ProjectFolders\u0022:\n        return self\n\n    @staticmethod\n    def find_root() -\u003E str:\n        for folder in (os.getcwd(), os.path.dirname(os.path.abspath(__file__))):\n            if glob.glob(os.path.join(folder, \u0022*.catnip\u0022)):\n                return folder\n        return os.getcwd()\n\n    def input_path(self, file_name: str) -\u003E str:\n        return os.path.join(self.input_dir, file_name)\n\n    def output_path(self, file_name: str) -\u003E str:\n        return os.path.join(self.output_dir, file_name)\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "ProjectFolders.md",
+        "nodeCathegory": 3,
+        "id": 1,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 1,
+            "title": "folders",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 1,
+              "title": "folders",
+              "connecttionType": 0
+            }
+          ],
+          "description": "ProjectFolders",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "ProjectFolders",
+        "targetPath": ""
+      },
+      "locationX": 0,
+      "locationY": 0
+    },
+    {
+      "nodeData": {
+        "codeText": "import os\nfrom typing import Dict, Optional\n\nimport pandas as pd\n\n\nclass TableReader:\n    \u0022\u0022\u0022Czyta tabel\u0119 z pliku CSV, JSON (lista rekord\u00F3w) albo Excel do DataFrame.\u0022\u0022\u0022\n\n    FORMATS = {\u0022.csv\u0022: \u0022CSV\u0022, \u0022.json\u0022: \u0022JSON\u0022, \u0022.xlsx\u0022: \u0022Excel\u0022, \u0022.xls\u0022: \u0022Excel\u0022}\n\n    def reader(self) -\u003E \u0022TableReader\u0022:\n        return self\n\n    def format_of(self, path: str) -\u003E str:\n        return self.FORMATS.get(os.path.splitext(path)[1].lower(), \u0022?\u0022)\n\n    def read(self, path: str, dtypes: Optional[Dict[str, str]] = None) -\u003E pd.DataFrame:\n        \u0022\u0022\u0022dtypes: typy kolumn dla du\u017Cych CSV, np. {\u0022customer_id\u0022: \u0022category\u0022} \u2014 oszcz\u0119dza pami\u0119\u0107.\u0022\u0022\u0022\n        kind = self.format_of(path)\n        if kind == \u0022CSV\u0022:\n            return pd.read_csv(path, dtype=dtypes)\n        if kind == \u0022JSON\u0022:\n            return pd.read_json(path, orient=\u0022records\u0022, convert_dates=False)\n        if kind == \u0022Excel\u0022:\n            return pd.read_excel(path)\n        raise ValueError(\u0022Nieobs\u0142ugiwany format pliku: %s\u0022 % path)\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "TableReader.md",
+        "nodeCathegory": 3,
+        "id": 2,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 2,
+            "title": "reader",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 2,
+              "title": "reader",
+              "connecttionType": 0
+            }
+          ],
+          "description": "TableReader",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "TableReader",
+        "targetPath": ""
+      },
+      "locationX": 0,
+      "locationY": 150
+    },
+    {
+      "nodeData": {
+        "codeText": "import time\nfrom typing import Dict, List, Tuple\n\nimport pandas as pd\n\nfrom ColumnProfile import ColumnProfile\nfrom DataScan import DataScan\nfrom PipelineStep import PipelineStep\nfrom TableProfile import TableProfile\n\n\nclass DataScanner:\n    \u0022\u0022\u0022Data Scan: rozpoznaje typy kolumn, klucze i powi\u0105zania mi\u0119dzy plikami \u2014 bez r\u0119cznego opisu danych.\u0022\u0022\u0022\n\n    SAMPLE = 5000\n\n    def scanner(self) -\u003E \u0022DataScanner\u0022:\n        return self\n\n    def scan(self, tables: Dict[str, Tuple[str, pd.DataFrame]]) -\u003E DataScan:\n        \u0022\u0022\u0022tables: nazwa pliku -\u003E (format, DataFrame).\u0022\u0022\u0022\n        started = time.perf_counter()\n        profiles = [TableProfile(name, source_format, len(frame), [self.profile_column(frame[c]) for c in frame.columns])\n                    for name, (source_format, frame) in tables.items()]\n        self.mark_keys(profiles, tables)\n        self.link_references(profiles, tables)\n        scan = DataScan(profiles)\n        detail = \u0022%d plik\u00F3w, %d kolumn, %d powi\u0105za\u0144\u0022 % (len(profiles), sum(len(p.columns) for p in profiles),\n                                                        len(scan.relations()))\n        scan.pipeline.append(PipelineStep(\u0022Data Scan\u0022, detail, time.perf_counter() - started))\n        return scan\n\n    def profile_column(self, series: pd.Series) -\u003E ColumnProfile:\n        sample = series.dropna()\n        if len(sample) \u003E self.SAMPLE:\n            sample = sample.sample(self.SAMPLE, random_state=0)\n        example = str(sample.iloc[0]) if len(sample) else \u0022\u0022\n        return ColumnProfile(name=str(series.name), type_name=self.type_of(series, sample),\n                             null_pct=float(series.isna().mean() * 100),\n                             distinct=int(series.nunique(dropna=True)), example=example[:30])\n\n    @staticmethod\n    def type_of(series: pd.Series, sample: pd.Series) -\u003E str:\n        if pd.api.types.is_bool_dtype(series):\n            return \u0022bool\u0022\n        if pd.api.types.is_integer_dtype(series):\n            return \u0022int\u0022\n        if pd.api.types.is_float_dtype(series):\n            return \u0022int\u0022 if len(sample) and bool((sample % 1 == 0).all()) else \u0022decimal\u0022\n        if pd.api.types.is_datetime64_any_dtype(series):\n            return \u0022DateTime\u0022\n        if len(sample) and bool(sample.astype(str).str.match(r\u0022^\\d{4}-\\d{2}-\\d{2}\u0022).all()):\n            return \u0022DateTime\u0022\n        return \u0022string\u0022\n\n    @staticmethod\n    def is_id_name(name: str) -\u003E bool:\n        lowered = name.lower()\n        return lowered == \u0022id\u0022 or lowered.endswith(\u0022_id\u0022)\n\n    def mark_keys(self, profiles: List[TableProfile], tables: Dict[str, Tuple[str, pd.DataFrame]]) -\u003E None:\n        for profile in profiles:\n            frame = tables[profile.name][1]\n            for column in profile.columns:\n                values = frame[column.name]\n                if self.is_id_name(column.name) and bool(values.notna().all()) and values.is_unique:\n                    column.is_key = True\n                    break\n\n    def link_references(self, profiles: List[TableProfile], tables: Dict[str, Tuple[str, pd.DataFrame]]) -\u003E None:\n        owners = [(p.key(), p.name) for p in profiles if p.key()]\n        for profile in profiles:\n            frame = tables[profile.name][1]\n            for column in profile.columns:\n                if column.is_key:\n                    continue\n                for key, owner in owners:\n                    if key == column.name and owner != profile.name:\n                        own_values = pd.Series(frame[column.name].dropna().unique())\n                        if bool(own_values.isin(tables[owner][1][key]).all()):\n                            column.references = \u0022%s.%s\u0022 % (owner, key)\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "DataScanner.md",
+        "nodeCathegory": 3,
+        "id": 3,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 3,
+            "title": "scanner",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 3,
+              "title": "scanner",
+              "connecttionType": 0
+            }
+          ],
+          "description": "DataScanner",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "DataScanner",
+        "targetPath": ""
+      },
+      "locationX": 0,
+      "locationY": 422
+    },
+    {
+      "nodeData": {
+        "codeText": "import json\r\nimport os\r\nfrom typing import Dict, List\r\n\r\nimport pandas as pd\r\n\r\nfrom ProjectFolders import ProjectFolders\r\n\r\n\r\nclass DemoCostData:\r\n    \u0022\u0022\u0022Dane demonstracyjne producenta stolarki aluminiowej i PVC: produkty, BOM, ceny surowc\u00F3w i koszty sta\u0142e.\r\n\r\n    Pliki powstaj\u0105 w input/ tylko wtedy, gdy ich tam nie ma \u2014 podmie\u0144 je na dane firmy (te same kolumny).\r\n    Ceny produkt\u00F3w s\u0105 dobrane tak, \u017Ceby firma mia\u0142a ok. 9% mar\u017Cy EBITDA, a najta\u0144sze wyroby aluminiowe\r\n    (parapety, rolety) \u2014 cienk\u0105 mar\u017C\u0119, kt\u00F3r\u0105 wzrost ceny aluminium \u0142atwo zjada.\r\n    \u0022\u0022\u0022\r\n\r\n    FILES = (\u0022products.xlsx\u0022, \u0022bom.csv\u0022, \u0022resources.json\u0022, \u0022overheads.json\u0022)\r\n\r\n    RESOURCES = [  # resource_id, nazwa, jednostka, cena, dostawca\r\n        (\u0022R-AL\u0022, \u0022Aluminium (profile)\u0022, \u0022kg\u0022, 13.20, \u0022Hydro Extrusion\u0022),\r\n        (\u0022R-GL\u0022, \u0022Szk\u0142o zespolone\u0022, \u0022m2\u0022, 140.00, \u0022Pilkington\u0022),\r\n        (\u0022R-ST\u0022, \u0022Stal\u0022, \u0022kg\u0022, 4.40, \u0022Stalprodukt\u0022),\r\n        (\u0022R-PVC\u0022, \u0022Profil PVC\u0022, \u0022kg\u0022, 9.50, \u0022Veka\u0022),\r\n        (\u0022R-EN\u0022, \u0022Energia elektryczna\u0022, \u0022kWh\u0022, 0.95, \u0022Tauron\u0022),\r\n        (\u0022R-HW\u0022, \u0022Okucia\u0022, \u0022kpl\u0022, 85.00, \u0022Roto\u0022),\r\n        (\u0022R-PK\u0022, \u0022Opakowanie\u0022, \u0022szt\u0022, 18.00, \u0022Smurfit Kappa\u0022),\r\n    ]\r\n    PRODUCTS = [  # product_id, nazwa, rodzina, roczny wolumen, robocizna na szt., docelowa mar\u017Ca pokrycia, BOM\r\n        (\u0022OA-1\u0022, \u0022Okno aluminiowe OA-1\u0022, \u0022Okna\u0022, 6000, 260, 0.30, {\u0022R-AL\u0022: 14, \u0022R-GL\u0022: 1.6, \u0022R-HW\u0022: 1, \u0022R-EN\u0022: 35, \u0022R-PK\u0022: 1}),\r\n        (\u0022DA-2\u0022, \u0022Drzwi aluminiowe DA-2\u0022, \u0022Drzwi\u0022, 2200, 520, 0.32, {\u0022R-AL\u0022: 28, \u0022R-GL\u0022: 1.8, \u0022R-HW\u0022: 1.5, \u0022R-EN\u0022: 60, \u0022R-PK\u0022: 1}),\r\n        (\u0022FS-3\u0022, \u0022Fasada s\u0142upowo-ryglowa FS-3 (m\u00B2)\u0022, \u0022Fasady\u0022, 9000, 210, 0.25, {\u0022R-AL\u0022: 22, \u0022R-GL\u0022: 1.05, \u0022R-ST\u0022: 2, \u0022R-EN\u0022: 40}),\r\n        (\u0022OP-4\u0022, \u0022Okno PVC OP-4\u0022, \u0022Okna\u0022, 14000, 150, 0.29, {\u0022R-PVC\u0022: 16, \u0022R-ST\u0022: 4, \u0022R-GL\u0022: 1.6, \u0022R-HW\u0022: 1, \u0022R-EN\u0022: 20, \u0022R-PK\u0022: 1}),\r\n        (\u0022BS-5\u0022, \u0022Brama stalowa BS-5\u0022, \u0022Bramy\u0022, 1500, 640, 0.27, {\u0022R-ST\u0022: 85, \u0022R-HW\u0022: 2, \u0022R-EN\u0022: 90, \u0022R-PK\u0022: 1}),\r\n        (\u0022BA-6\u0022, \u0022Balustrada aluminiowa BA-6 (mb)\u0022, \u0022Balustrady\u0022, 5000, 160, 0.23, {\u0022R-AL\u0022: 9, \u0022R-GL\u0022: 0.9, \u0022R-EN\u0022: 15}),\r\n        (\u0022RA-7\u0022, \u0022Roleta aluminiowa RA-7\u0022, \u0022Os\u0142ony\u0022, 9000, 95, 0.13, {\u0022R-AL\u0022: 7, \u0022R-HW\u0022: 1, \u0022R-EN\u0022: 12, \u0022R-PK\u0022: 1}),\r\n        (\u0022PA-8\u0022, \u0022Parapet aluminiowy PA-8 (mb)\u0022, \u0022Parapety\u0022, 30000, 14, 0.09, {\u0022R-AL\u0022: 3.2, \u0022R-EN\u0022: 4, \u0022R-PK\u0022: 0.5}),\r\n    ]\r\n    OVERHEAD_SHARES = [  # pozycja koszt\u00F3w sta\u0142ych i jej udzia\u0142 w sumie\r\n        (\u0022OH-01\u0022, \u0022Wynagrodzenia administracji i sprzeda\u017Cy\u0022, \u0022Ludzie\u0022, 0.38),\r\n        (\u0022OH-02\u0022, \u0022Utrzymanie hali i maszyn\u0022, \u0022Produkcja\u0022, 0.22),\r\n        (\u0022OH-03\u0022, \u0022Logistyka i flota\u0022, \u0022Logistyka\u0022, 0.16),\r\n        (\u0022OH-04\u0022, \u0022Marketing i targi\u0022, \u0022Sprzeda\u017C\u0022, 0.08),\r\n        (\u0022OH-05\u0022, \u0022IT i licencje\u0022, \u0022Administracja\u0022, 0.06),\r\n        (\u0022OH-06\u0022, \u0022Ubezpieczenia, doradztwo, pozosta\u0142e\u0022, \u0022Administracja\u0022, 0.10),\r\n    ]\r\n    TARGET_EBITDA_MARGIN = 0.09\r\n\r\n    def generator(self) -\u003E \u0022DemoCostData\u0022:\r\n        return self\r\n\r\n    def ensure(self, folders: ProjectFolders) -\u003E bool:\r\n        \u0022\u0022\u0022Tworzy brakuj\u0105ce pliki demonstracyjne; zwraca True, gdy co\u015B zapisano.\u0022\u0022\u0022\r\n        if all(os.path.exists(folders.input_path(name)) for name in self.FILES):\r\n            return False\r\n        self.write(folders)\r\n        return True\r\n\r\n    def write(self, folders: ProjectFolders) -\u003E None:\r\n        prices = {r[0]: r[3] for r in self.RESOURCES}\r\n        products = self.products(prices)\r\n        pd.DataFrame(products).to_excel(folders.input_path(\u0022products.xlsx\u0022), index=False)\r\n        pd.DataFrame(self.bom()).to_csv(folders.input_path(\u0022bom.csv\u0022), index=False)\r\n        resources = [{\u0022resource_id\u0022: r[0], \u0022name\u0022: r[1], \u0022unit\u0022: r[2], \u0022price\u0022: r[3], \u0022supplier\u0022: r[4]} for r in self.RESOURCES]\r\n        self.write_json(resources, folders.input_path(\u0022resources.json\u0022))\r\n        self.write_json(self.overheads(products, prices), folders.input_path(\u0022overheads.json\u0022))\r\n\r\n    @staticmethod\r\n    def write_json(records: List[dict], path: str) -\u003E None:\r\n        with open(path, \u0022w\u0022, encoding=\u0022utf-8\u0022) as handle:\r\n            json.dump(records, handle, ensure_ascii=False, indent=1)\r\n\r\n    def unit_cost(self, bom: Dict[str, float], labour: float, prices: Dict[str, float]) -\u003E float:\r\n        return sum(qty * prices[rid] for rid, qty in bom.items()) \u002B labour\r\n\r\n    def products(self, prices: Dict[str, float]) -\u003E List[dict]:\r\n        rows = []\r\n        for pid, name, family, volume, labour, margin, bom in self.PRODUCTS:\r\n            price = self.unit_cost(bom, labour, prices) / (1 - margin)\r\n            price = round(price, -1 if price \u003E= 500 else 0)\r\n            rows.append({\u0022product_id\u0022: pid, \u0022name\u0022: name, \u0022family\u0022: family, \u0022sell_price\u0022: price,\r\n                         \u0022annual_volume\u0022: volume, \u0022labour_cost\u0022: labour})\r\n        return rows\r\n\r\n    def bom(self) -\u003E List[dict]:\r\n        return [{\u0022product_id\u0022: pid, \u0022resource_id\u0022: rid, \u0022qty_per_unit\u0022: qty}\r\n                for pid, _, _, _, _, _, bom in self.PRODUCTS for rid, qty in bom.items()]\r\n\r\n    def overheads(self, products: List[dict], prices: Dict[str, float]) -\u003E List[dict]:\r\n        boms = {p[0]: (p[6], p[4]) for p in self.PRODUCTS}\r\n        revenue = sum(p[\u0022sell_price\u0022] * p[\u0022annual_volume\u0022] for p in products)\r\n        contribution = sum((p[\u0022sell_price\u0022] - self.unit_cost(*boms[p[\u0022product_id\u0022]], prices)) * p[\u0022annual_volume\u0022] for p in products)\r\n        fixed = contribution - self.TARGET_EBITDA_MARGIN * revenue\r\n        return [{\u0022cost_id\u0022: cid, \u0022name\u0022: name, \u0022category\u0022: category, \u0022annual_pln\u0022: round(fixed * share, -3)}\r\n                for cid, name, category, share in self.OVERHEAD_SHARES]\r\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "DemoCostData.md",
+        "nodeCathegory": 3,
+        "id": 4,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 4,
+            "title": "generator",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 4,
+              "title": "generator",
+              "connecttionType": 0
+            }
+          ],
+          "description": "DemoCostData",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "DemoCostData",
+        "targetPath": ""
+      },
+      "locationX": 0,
+      "locationY": 288
+    },
+    {
+      "nodeData": {
+        "codeText": "import time\n\nfrom CostModel import CostModel\nfrom DataScanner import DataScanner\nfrom DemoCostData import DemoCostData\nfrom PipelineStep import PipelineStep\nfrom ProjectFolders import ProjectFolders\nfrom TableReader import TableReader\n\n\nclass CostModelLoader:\n    \u0022\u0022\u0022Wczytuje produkty, BOM, ceny surowc\u00F3w i koszty sta\u0142e z input/, sprawdza sp\u00F3jno\u015B\u0107 i robi Data Scan.\u0022\u0022\u0022\n\n    REQUIRED = {\n        \u0022products.xlsx\u0022: [\u0022product_id\u0022, \u0022name\u0022, \u0022sell_price\u0022, \u0022annual_volume\u0022, \u0022labour_cost\u0022],\n        \u0022bom.csv\u0022: [\u0022product_id\u0022, \u0022resource_id\u0022, \u0022qty_per_unit\u0022],\n        \u0022resources.json\u0022: [\u0022resource_id\u0022, \u0022name\u0022, \u0022unit\u0022, \u0022price\u0022],\n        \u0022overheads.json\u0022: [\u0022cost_id\u0022, \u0022name\u0022, \u0022annual_pln\u0022],\n    }\n\n    def __init__(self, folders: ProjectFolders, reader: TableReader, generator: DemoCostData, scanner: DataScanner):\n        self.folders = folders\n        self.reader = reader\n        self.generator = generator\n        self.scanner = scanner\n\n    def model(self) -\u003E CostModel:\n        demo = self.generator.ensure(self.folders)\n        started = time.perf_counter()\n        tables = {}\n        for name, columns in self.REQUIRED.items():\n            path = self.folders.input_path(name)\n            frame = self.reader.read(path)\n            missing = [c for c in columns if c not in frame.columns]\n            if missing:\n                raise ValueError(\u0022%s: brak kolumn %s\u0022 % (name, \u0022, \u0022.join(missing)))\n            tables[name] = (self.reader.format_of(path), frame)\n        loaded = time.perf_counter() - started\n        frames = {name: frame for name, (_, frame) in tables.items()}\n        scan = self.scanner.scan(tables)\n        rows = sum(len(frame) for frame in frames.values())\n        scan.pipeline.insert(0, PipelineStep(\u0022Load\u0022, \u0022%d plik\u00F3w (CSV, JSON, Excel), %d wierszy\u0022 % (len(frames), rows), loaded))\n        started = time.perf_counter()\n        self.validate(frames)\n        scan.pipeline.append(PipelineStep(\u0022Validate\u0022, \u0022ka\u017Cda pozycja BOM ma produkt i cen\u0119 surowca\u0022, time.perf_counter() - started))\n        return CostModel(products=frames[\u0022products.xlsx\u0022], bom=frames[\u0022bom.csv\u0022], resources=frames[\u0022resources.json\u0022],\n                         overheads=frames[\u0022overheads.json\u0022], scan=scan, demo=demo)\n\n    @staticmethod\n    def validate(frames) -\u003E None:\n        bom = frames[\u0022bom.csv\u0022]\n        unknown_products = set(bom.product_id) - set(frames[\u0022products.xlsx\u0022].product_id)\n        unknown_resources = set(bom.resource_id) - set(frames[\u0022resources.json\u0022].resource_id)\n        if unknown_products or unknown_resources:\n            raise ValueError(\u0022BOM wskazuje nieznane produkty %s lub surowce %s\u0022 % (sorted(unknown_products), sorted(unknown_resources)))\n",
+        "codeFile": "",
+        "maxInputNumber": 4,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "CostModelLoader.md",
+        "nodeCathegory": 3,
+        "id": 5,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 4,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": true,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 5,
+            "title": "folders",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [
+            {
+              "id": 5,
+              "title": "folders",
+              "connecttionType": 0
+            },
+            {
+              "id": 6,
+              "title": "reader",
+              "connecttionType": 0
+            },
+            {
+              "id": 7,
+              "title": "generator",
+              "connecttionType": 0
+            },
+            {
+              "id": 8,
+              "title": "scanner",
+              "connecttionType": 0
+            }
+          ],
+          "selectedOutputConnectionSettings": {
+            "id": 9,
+            "title": "model",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 9,
+              "title": "model",
+              "connecttionType": 0
+            }
+          ],
+          "description": "CostModelLoader",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "CostModelLoader",
+        "targetPath": ""
+      },
+      "locationX": 350,
+      "locationY": 150
+    },
+    {
+      "nodeData": {
+        "codeText": "import time\nfrom typing import Dict, List, Sequence, Tuple\n\nimport numpy as np\n\nfrom CostModel import CostModel\nfrom PipelineStep import PipelineStep\nfrom ProductResult import ProductResult\nfrom Scenario import Scenario\nfrom ScenarioResult import ScenarioResult\n\n\nclass ScenarioEngine:\n    \u0022\u0022\u0022Przelicza wynik firmy dla dowolnej zmiany cen surowc\u00F3w, cen sprzeda\u017Cy i wolumenu.\n\n    Koszt jednostkowy = \u03A3 (zu\u017Cycie z BOM \u00D7 cena surowca \u00D7 (1 \u002B szok)) \u002B robocizna. Cena ro\u015Bnie o\n    pass_through_pct % wzrostu kosztu jednostkowego, wolumen o volume_change_pct, koszty sta\u0142e zostaj\u0105.\n    \u0022\u0022\u0022\n\n    LADDER = (0.0, 10.0, 15.0, 25.0)\n\n    def __init__(self, model: CostModel):\n        started = time.perf_counter()\n        self.model = model\n        products = model.products.set_index(\u0022product_id\u0022)\n        self.product_ids = list(products.index)\n        self.names = products.name.to_dict()\n        self.resource_ids = list(model.resources.resource_id)\n        self.resource_names = dict(zip(model.resources.resource_id, model.resources.name))\n        self.usage = (model.bom.pivot_table(index=\u0022product_id\u0022, columns=\u0022resource_id\u0022, values=\u0022qty_per_unit\u0022, aggfunc=\u0022sum\u0022)\n                      .reindex(index=self.product_ids, columns=self.resource_ids).fillna(0.0).to_numpy())\n        self.prices = model.resources.set_index(\u0022resource_id\u0022).price.reindex(self.resource_ids).to_numpy(dtype=float)\n        self.sell_price = products.sell_price.to_numpy(dtype=float)\n        self.volume = products.annual_volume.to_numpy(dtype=float)\n        self.labour = products.labour_cost.to_numpy(dtype=float)\n        self.fixed_costs = float(model.overheads.annual_pln.sum())\n        self.base_unit_cost = self.usage @ self.prices \u002B self.labour\n        model.scan.pipeline.append(PipelineStep(\u0022Build cost model\u0022, \u0022%d produkt\u00F3w \u00D7 %d surowc\u00F3w, koszty sta\u0142e %d pozycji\u0022 % (\n            len(self.product_ids), len(self.resource_ids), len(model.overheads)), time.perf_counter() - started))\n\n    def engine(self) -\u003E \u0022ScenarioEngine\u0022:\n        return self\n\n    def resource_options(self) -\u003E List[Tuple[str, str]]:\n        return [(rid, self.resource_names[rid]) for rid in self.resource_ids]\n\n    def base(self) -\u003E ScenarioResult:\n        return self.run(Scenario(\u0022BASE\u0022))\n\n    def run(self, scenario: Scenario) -\u003E ScenarioResult:\n        factors = np.array([1 \u002B scenario.shocks.get(rid, 0.0) / 100 for rid in self.resource_ids])\n        unit_cost = self.usage @ (self.prices * factors) \u002B self.labour\n        price = self.sell_price \u002B scenario.pass_through_pct / 100 * (unit_cost - self.base_unit_cost)\n        volume = self.volume * (1 \u002B scenario.volume_change_pct / 100)\n        base_margin = 100 * (1 - self.base_unit_cost / self.sell_price)\n        margin = 100 * (1 - unit_cost / price)\n        required = 100 * np.maximum(unit_cost - self.base_unit_cost, 0) / self.sell_price\n        products = [ProductResult(pid, self.names[pid], float(price[i]), float(unit_cost[i]), float(self.base_unit_cost[i]),\n                                  float(volume[i]), float(base_margin[i]), float(margin[i]),\n                                  float((price[i] - unit_cost[i]) * volume[i]), float(required[i]))\n                    for i, pid in enumerate(self.product_ids)]\n        return ScenarioResult(scenario, float(price @ volume), float(unit_cost @ volume), self.fixed_costs, products)\n\n    def shock(self, resource_id: str, shock_pct: float, pass_through_pct: float = 0.0, volume_change_pct: float = 0.0) -\u003E ScenarioResult:\n        name = \u0022BASE\u0022 if not shock_pct else \u0022%s %\u002Bg%%\u0022 % (self.resource_names[resource_id], shock_pct)\n        return self.run(Scenario(name, {resource_id: shock_pct}, pass_through_pct, volume_change_pct))\n\n    def ladder(self, resource_id: str, pass_through_pct: float = 0.0, volume_change_pct: float = 0.0,\n               shocks: Sequence[float] = LADDER) -\u003E List[ScenarioResult]:\n        return [self.shock(resource_id, s, pass_through_pct, volume_change_pct) for s in shocks]\n\n    def sensitivity(self, shock_pct: float = 10.0) -\u003E Dict[str, float]:\n        \u0022\u0022\u0022Zmiana EBITDA [z\u0142] przy wzro\u015Bcie ceny ka\u017Cdego surowca o shock_pct, od najgro\u017Aniejszego.\u0022\u0022\u0022\n        base = self.base().ebitda\n        impact = {self.resource_names[rid]: self.shock(rid, shock_pct).ebitda - base for rid in self.resource_ids}\n        return dict(sorted(impact.items(), key=lambda item: item[1]))\n\n    def shock_to_zero_ebitda(self, resource_id: str, pass_through_pct: float = 0.0, volume_change_pct: float = 0.0) -\u003E float:\n        \u0022\u0022\u0022O ile % mo\u017Ce zdro\u017Ce\u0107 surowiec, zanim EBITDA spadnie do zera (EBITDA jest liniowa wzgl\u0119dem szoku).\u0022\u0022\u0022\n        at_zero = self.shock(resource_id, 0.0, pass_through_pct, volume_change_pct).ebitda\n        at_hundred = self.shock(resource_id, 100.0, pass_through_pct, volume_change_pct).ebitda\n        slope = (at_hundred - at_zero) / 100\n        if slope \u003E= 0:\n            return float(\u0022inf\u0022)\n        return max(0.0, -at_zero / slope)\n\n    def cost_structure(self) -\u003E Dict[str, float]:\n        \u0022\u0022\u0022Roczny koszt ka\u017Cdego surowca, robocizny i koszt\u00F3w sta\u0142ych w scenariuszu bazowym.\u0022\u0022\u0022\n        spend = (self.usage * self.prices).T @ self.volume\n        structure = {self.resource_names[rid]: float(spend[i]) for i, rid in enumerate(self.resource_ids)}\n        structure[\u0022Robocizna\u0022] = float(self.labour @ self.volume)\n        structure[\u0022Koszty sta\u0142e\u0022] = self.fixed_costs\n        return dict(sorted(structure.items(), key=lambda item: -item[1]))\n",
+        "codeFile": "",
+        "maxInputNumber": 1,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "ScenarioEngine.md",
+        "nodeCathegory": 3,
+        "id": 6,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 1,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": true,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 10,
+            "title": "model",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [
+            {
+              "id": 10,
+              "title": "model",
+              "connecttionType": 0
+            }
+          ],
+          "selectedOutputConnectionSettings": {
+            "id": 11,
+            "title": "engine",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 11,
+              "title": "engine",
+              "connecttionType": 0
+            }
+          ],
+          "description": "ScenarioEngine",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "ScenarioEngine",
+        "targetPath": ""
+      },
+      "locationX": 700,
+      "locationY": 150
+    },
+    {
+      "nodeData": {
+        "codeText": "class PlnFormat:\n    \u0022\u0022\u0022Liczby po polsku: spacja tysi\u0119cy, przecinek dziesi\u0119tny, kwoty w z\u0142, tys. i mln.\u0022\u0022\u0022\n\n    def formatter(self) -\u003E \u0022PlnFormat\u0022:\n        return self\n\n    @staticmethod\n    def num(value: float, decimals: int = 0) -\u003E str:\n        if value is None or value != value:\n            return \u0022\u2014\u0022\n        if value in (float(\u0022inf\u0022), float(\u0022-inf\u0022)):\n            return \u0022\u221E\u0022\n        if round(value, decimals) == 0:\n            value = 0.0\n        return format(value, \u0022,.%df\u0022 % decimals).replace(\u0022,\u0022, \u0022 \u0022).replace(\u0022.\u0022, \u0022,\u0022).replace(\u0022-\u0022, \u0022\u2212\u0022)\n\n    @classmethod\n    def zl(cls, value: float, decimals: int = 0) -\u003E str:\n        return cls.num(value, decimals) \u002B \u0022 z\u0142\u0022\n\n    @classmethod\n    def short_zl(cls, value: float) -\u003E str:\n        if abs(value) \u003E= 1_000_000:\n            return cls.num(value / 1_000_000, 2) \u002B \u0022 mln z\u0142\u0022\n        if abs(value) \u003E= 1_000:\n            return cls.num(value / 1_000, 0) \u002B \u0022 tys. z\u0142\u0022\n        return cls.zl(value)\n\n    @classmethod\n    def pct(cls, value: float, decimals: int = 1) -\u003E str:\n        return cls.num(value, decimals) \u002B \u0022%\u0022\n\n    @classmethod\n    def signed_pct(cls, value: float, decimals: int = 1) -\u003E str:\n        return (\u0022\u002B\u0022 if round(value, decimals) \u003E 0 else \u0022\u0022) \u002B cls.pct(value, decimals)\n\n    @classmethod\n    def pp(cls, value: float, decimals: int = 1) -\u003E str:\n        return (\u0022\u002B\u0022 if round(value, decimals) \u003E 0 else \u0022\u0022) \u002B cls.num(value, decimals) \u002B \u0022 pp\u0022\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "PlnFormat.md",
+        "nodeCathegory": 3,
+        "id": 7,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 12,
+            "title": "formatter",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 12,
+              "title": "formatter",
+              "connecttionType": 0
+            }
+          ],
+          "description": "PlnFormat",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "PlnFormat",
+        "targetPath": ""
+      },
+      "locationX": 400,
+      "locationY": 541
+    },
+    {
+      "nodeData": {
+        "codeText": "from typing import List\n\nfrom PlnFormat import PlnFormat\nfrom ScenarioEngine import ScenarioEngine\nfrom ScenarioResult import ScenarioResult\n\n\nclass ScenarioAdvisor:\n    \u0022\u0022\u0022Zamienia wynik scenariusza w odpowied\u017A: co si\u0119 stanie z EBITDA, kt\u00F3re produkty s\u0105 zagro\u017Cone i co z tym zrobi\u0107.\u0022\u0022\u0022\n\n    def __init__(self, formatter: PlnFormat):\n        self.formatter = formatter\n\n    def advisor(self) -\u003E \u0022ScenarioAdvisor\u0022:\n        return self\n\n    def findings(self, engine: ScenarioEngine, base: ScenarioResult, result: ScenarioResult, resource_id: str) -\u003E List[str]:\n        f = self.formatter\n        scenario = result.scenario\n        change = result.ebitda - base.ebitda\n        lines = [\u0022%s: EBITDA %s \u2192 %s (%s, %s). Mar\u017Ca EBITDA %s \u2192 %s.\u0022 % (\n            scenario.name, f.short_zl(base.ebitda), f.short_zl(result.ebitda), f.short_zl(change),\n            f.signed_pct(100 * change / base.ebitda) if base.ebitda else \u0022\u2014\u0022,\n            f.pct(base.ebitda_margin), f.pct(result.ebitda_margin))]\n        at_risk = result.at_risk()\n        if at_risk:\n            lines.append(\u0022Produkty zagro\u017Cone (mar\u017Ca pokrycia \u003C %s): %s.\u0022 % (f.pct(at_risk[0].AT_RISK_MARGIN_PCT, 0), \u0022, \u0022.join(\n                \u0022%s \u2014 %s\u0022 % (p.name, f.pct(p.margin_pct)) for p in at_risk)))\n        else:\n            lines.append(\u0022\u017Baden produkt nie schodzi poni\u017Cej 5% mar\u017Cy pokrycia.\u0022)\n        needed = [p for p in result.products if p.required_price_increase_pct \u003E= 0.05]\n        if needed and scenario.pass_through_pct \u003C 100:\n            weighted = sum(p.required_price_increase_pct * p.price * p.volume for p in needed) / sum(p.price * p.volume for p in result.products)\n            top = sorted(needed, key=lambda p: -p.required_price_increase_pct)[:3]\n            lines.append(\u0022\u017Beby utrzyma\u0107 mar\u017Ce w z\u0142otych, ceny trzeba podnie\u015B\u0107 \u015Brednio o %s \u2014 najbardziej: %s.\u0022 % (\n                f.pct(weighted), \u0022, \u0022.join(\u0022%s %s\u0022 % (p.name, f.signed_pct(p.required_price_increase_pct)) for p in top)))\n        limit = engine.shock_to_zero_ebitda(resource_id, scenario.pass_through_pct, scenario.volume_change_pct)\n        name = engine.resource_names[resource_id]\n        if limit == float(\u0022inf\u0022):\n            lines.append(\u0022Przy tych za\u0142o\u017Ceniach wzrost ceny surowca \u201E%s\u201D nie sprowadzi EBITDA do zera.\u0022 % name)\n        else:\n            lines.append(\u0022EBITDA spadnie do zera dopiero przy wzro\u015Bcie ceny surowca \u201E%s\u201D o %s.\u0022 % (name, f.pct(limit, 0)))\n        if result.break_even_revenue != float(\u0022inf\u0022):\n            lines.append(\u0022Pr\u00F3g rentowno\u015Bci: %s przychodu (zapas bezpiecze\u0144stwa %s).\u0022 % (\n                f.short_zl(result.break_even_revenue), f.pct(100 * (1 - result.break_even_revenue / result.revenue))))\n        return lines\n",
+        "codeFile": "",
+        "maxInputNumber": 1,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "ScenarioAdvisor.md",
+        "nodeCathegory": 3,
+        "id": 8,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 1,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": true,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 13,
+            "title": "formatter",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [
+            {
+              "id": 13,
+              "title": "formatter",
+              "connecttionType": 0
+            }
+          ],
+          "selectedOutputConnectionSettings": {
+            "id": 14,
+            "title": "advisor",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 14,
+              "title": "advisor",
+              "connecttionType": 0
+            }
+          ],
+          "description": "ScenarioAdvisor",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "ScenarioAdvisor",
+        "targetPath": ""
+      },
+      "locationX": 615,
+      "locationY": 307
+    },
+    {
+      "nodeData": {
+        "codeText": "# CatNip Interactive Report \u2014 generated from the block\u0027s page (markup, Python, style).\n# Edit it in the block\u0027s editor: this file is rewritten whenever the editor is saved.\nimport base64 as _ir_base64\nimport html as _ir_html\nimport io as _ir_io\nimport json as _ir_json_module\nimport math as _ir_math\nimport os as _ir_os\nimport sys as _ir_sys\nimport threading as _ir_threading\nimport traceback as _ir_traceback\nimport uuid as _ir_uuid\n\n\nclass ScenariuszeKosztowe:\n    TITLE = \u0027Co je\u015Bli zdro\u017Cej\u0105 surowce?\u0027\n    HEIGHT = 1700\n    KEEP_ALIVE = True\n    ACTIONS = {}\n    CATNIP_LIVE_ACTIONS = ()\n    MARKUP = (\n        \u0027\u003Cdiv class=\u0022cn-page\u0022\u003E\\n\u0027\n        \u0027  \u003Ch1\u003ECo si\u0119 stanie, je\u015Bli zdro\u017Cej\u0105 surowce?\u003C/h1\u003E\\n\u0027\n        \u0027  \u003Cp class=\u0022cn-muted\u0022\u003E{source_note} \u00B7 BOM (CSV) \u002B produkty (Excel) \u002B ceny surowc\u00F3w i koszty sta\u0142e (JSON) \u2192 Data Scan \u2192 model kosztowy \u2192 scenariusze\u003C/p\u003E\\n\u0027\n        \u0027\\n\u0027\n        \u0027  \u003Cdiv class=\u0022cn-card\u0022\u003E\\n\u0027\n        \u0027    \u003Cdiv class=\u0022cn-row\u0022\u003E\\n\u0027\n        \u0027      {select(\u0022resource\u0022, resource_options, label=\u0022Surowiec\u0022)}\\n\u0027\n        \u0027      {slider(\u0022shock\u0022, -20, 60, step=1, label=\u0022Zmiana ceny surowca %\u0022)}\\n\u0027\n        \u0027      {slider(\u0022pass_through\u0022, 0, 100, step=5, label=\u0022Przerzucenie na ceny %\u0022)}\\n\u0027\n        \u0027      {slider(\u0022volume\u0022, -30, 20, step=1, label=\u0022Zmiana wolumenu %\u0022)}\\n\u0027\n        \u0027    \u003C/div\u003E\\n\u0027\n        \u0027  \u003C/div\u003E\\n\u0027\n        \u0027\\n\u0027\n        \u0027  \u003Cdiv class=\u0022cn-grid-4\u0022\u003E\\n\u0027\n        \u0027    {self._kpi(\u0022EBITDA \u2014 \u0022 \u002B r.scenario.name, f.short_zl(r.ebitda), f.short_zl(r.ebitda - base.ebitda) \u002B \u0022 vs BASE\u0022, r.ebitda - base.ebitda)}\\n\u0027\n        \u0027    {self._kpi(\u0022Mar\u017Ca EBITDA\u0022, f.pct(r.ebitda_margin), f.pp(r.ebitda_margin - base.ebitda_margin), r.ebitda_margin - base.ebitda_margin)}\\n\u0027\n        \u0027    {self._kpi(\u0022Pr\u00F3g rentowno\u015Bci (przych\u00F3d)\u0022, f.short_zl(r.break_even_revenue), f.short_zl(r.break_even_revenue - base.break_even_revenue), r.break_even_revenue - base.break_even_revenue, good_up=False)}\\n\u0027\n        \u0027    {self._kpi(\u0022Produkty zagro\u017Cone\u0022, str(risk_count) \u002B \u0022 z \u0022 \u002B str(len(r.products)), \u0022mar\u017Ca pokrycia \u003C 5%\u0022 if risk_count else \u0022brak\u0022, -risk_count)}\\n\u0027\n        \u0027  \u003C/div\u003E\\n\u0027\n        \u0027\\n\u0027\n        \u0027  \u003Cdiv class=\u0022cn-grid-2\u0022\u003E\\n\u0027\n        \u0027    \u003Cdiv class=\u0022cn-card answer\u0022\u003E\\n\u0027\n        \u0027      \u003Ch3\u003EOdpowied\u017A\u003C/h3\u003E\\n\u0027\n        \u0027      {findings_html}\\n\u0027\n        \u0027    \u003C/div\u003E\\n\u0027\n        \u0027    \u003Cdiv class=\u0022cn-card\u0022\u003E\\n\u0027\n        \u0027      \u003Ch3\u003EDrabina scenariuszy: {resource_name}\u003C/h3\u003E\\n\u0027\n        \u0027      {ladder_chart}\\n\u0027\n        \u0027    \u003C/div\u003E\\n\u0027\n        \u0027  \u003C/div\u003E\\n\u0027\n        \u0027\\n\u0027\n        \u0027  \u003Cdiv class=\u0022cn-grid-2\u0022\u003E\\n\u0027\n        \u0027    \u003Cdiv class=\u0022cn-card\u0022\u003E\u003Ch3\u003EKt\u00F3ry surowiec boli najbardziej? (\u002B10% ceny)\u003C/h3\u003E{tornado_chart}\u003C/div\u003E\\n\u0027\n        \u0027    \u003Cdiv class=\u0022cn-card\u0022\u003E\u003Ch3\u003EMar\u017Ca pokrycia produkt\u00F3w: przed i po\u003C/h3\u003E{margin_chart}\u003C/div\u003E\\n\u0027\n        \u0027  \u003C/div\u003E\\n\u0027\n        \u0027\\n\u0027\n        \u0027  \u003Cdiv class=\u0022cn-card\u0022\u003E\\n\u0027\n        \u0027    \u003Ch3\u003EProdukty w scenariuszu \u2014 od najs\u0142abszej mar\u017Cy\u003C/h3\u003E\\n\u0027\n        \u0027    {table(product_rows, page_size=10, id=\u0022products\u0022)}\\n\u0027\n        \u0027  \u003C/div\u003E\\n\u0027\n        \u0027\\n\u0027\n        \u0027  \u003Cdiv class=\u0022cn-grid-2\u0022\u003E\\n\u0027\n        \u0027    \u003Cdiv class=\u0022cn-card\u0022\u003E\u003Ch3\u003EStruktura koszt\u00F3w (BASE, rocznie)\u003C/h3\u003E{structure_chart}\u003C/div\u003E\\n\u0027\n        \u0027    \u003Cdiv class=\u0022cn-card\u0022\u003E\\n\u0027\n        \u0027      \u003Ch3\u003EData Scan \u2014 co CatNip rozpozna\u0142 w danych\u003C/h3\u003E\\n\u0027\n        \u0027      \u003Cpre class=\u0022scan\u0022\u003E{scan_tree}\u003C/pre\u003E\\n\u0027\n        \u0027      \u003Cp\u003E\u003Cb\u003EPowi\u0105zania wykryte automatycznie\u003C/b\u003E\u003C/p\u003E\\n\u0027\n        \u0027      {relations_html}\\n\u0027\n        \u0027      {table(pipeline_rows, filter=False, sortable=False, id=\u0022pipeline\u0022)}\\n\u0027\n        \u0027    \u003C/div\u003E\\n\u0027\n        \u0027  \u003C/div\u003E\\n\u0027\n        \u0027\u003C/div\u003E\\n\u0027\n        \u0027\u0027\n    )\n    STYLE = (\n        \u0027.cn-page h1 { margin-bottom: 2px; }\\n\u0027\n        \u0027.cn-card h3 { margin-top: 0; }\\n\u0027\n        \u0027.answer .headline { font-size: 1.15em; font-weight: 600; }\\n\u0027\n        \u0027.answer ol, .answer ul { margin-top: 4px; padding-left: 22px; }\\n\u0027\n        \u0027.answer li { margin: 3px 0; }\\n\u0027\n        \u0027pre.scan { font-size: 0.82em; line-height: 1.35; max-height: 420px; overflow: auto; background: rgba(127,127,127,0.08); padding: 10px; border-radius: 6px; }\\n\u0027\n        \u0027.cn-kpi-value { font-size: 1.35em; }\\n\u0027\n        \u0027.flag { display: inline-block; padding: 1px 6px; margin: 1px; border-radius: 4px; font-size: 0.85em; background: rgba(220,57,18,0.12); }\\n\u0027\n        \u0027\u0027\n    )\n\n    def __init__(self, engine=None, advisor=None, formatter=None):\n        self.engine = engine\n        self.advisor = advisor\n        self.formatter = formatter\n        self.data = engine\n        _ir_init(self, {\u0027engine\u0027: engine, \u0027advisor\u0027: advisor, \u0027formatter\u0027: formatter})\n\n    def show(self):\n        \u0022\u0022\u0022Shows the page in the Run Engine\u0027s Output tab, or updates it when it is already there.\u0022\u0022\u0022\n        return _ir_show(self)\n\n    def set(self, name, value, refresh=False):\n        \u0022\u0022\u0022Sets a state value; the markup sees it by name. refresh=True renders the page again.\u0022\u0022\u0022\n        self.state[name] = value\n        if refresh:\n            self.refresh()\n\n    def get(self, name, default=None):\n        \u0022\u0022\u0022A state value \u2014 what a control bound to that name holds.\u0022\u0022\u0022\n        return self.state.get(name, default)\n\n    def values(self):\n        \u0022\u0022\u0022A copy of the page\u0027s state.\u0022\u0022\u0022\n        return dict(self.state)\n\n    def refresh(self):\n        \u0022\u0022\u0022Renders the page again and sends it to the Run Engine.\u0022\u0022\u0022\n        if self._ir[\u0027shown\u0027] and not self._ir[\u0027closed\u0027]:\n            _ir_push(self)\n\n    def toast(self, message, kind=\u0027info\u0027):\n        \u0022\u0022\u0022A short message over the page; kind is info, success, warning or error.\u0022\u0022\u0022\n        if self._ir[\u0027shown\u0027] and not self._ir[\u0027closed\u0027] and _ir_engine():\n            _ir_send({\u0027op\u0027: \u0027toast\u0027, \u0027id\u0027: self._ir[\u0027id\u0027], \u0027message\u0027: str(message), \u0027kind\u0027: kind})\n        else:\n            print(\u0027[%s] %s\u0027 % (kind, message), flush=True)\n\n    def close(self):\n        \u0022\u0022\u0022Closes the page; once every page is closed the run may end.\u0022\u0022\u0022\n        _ir_close(self)\n\n    def bind_action(self, name, handler):\n        \u0022\u0022\u0022Calls handler(values) on every click of the action\u0027s button \u2014 what the generated main does with a live action.\u0022\u0022\u0022\n        _ir_bind(self, name, handler)\n\n    # \u2500\u2500 The Python tab \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n    def setup(self):\n        ids = [rid for rid, _ in self.engine.resource_options()]\n        self.set(\u0022resource\u0022, \u0022R-AL\u0022 if \u0022R-AL\u0022 in ids else ids[0])\n        self.set(\u0022shock\u0022, 15)\n        self.set(\u0022pass_through\u0022, 0)\n        self.set(\u0022volume\u0022, 0)\n\n    def prepare(self):\n        e = self.engine\n        f = self.formatter\n        resource = self.get(\u0022resource\u0022)\n        shock = float(self.get(\u0022shock\u0022))\n        pass_through = float(self.get(\u0022pass_through\u0022))\n        volume = float(self.get(\u0022volume\u0022))\n        base = e.base()\n        result = e.shock(resource, shock, pass_through, volume)\n        ladder = e.ladder(resource, pass_through, volume, shocks=sorted({0.0, 10.0, 15.0, 25.0, shock}))\n        scan = e.model.scan\n        return {\n            \u0022f\u0022: f,\n            \u0022base\u0022: base,\n            \u0022r\u0022: result,\n            \u0022resource_name\u0022: e.resource_names[resource],\n            \u0022resource_options\u0022: e.resource_options(),\n            \u0022findings_html\u0022: html(\u0022\u003Cul\u003E%s\u003C/ul\u003E\u0022 % \u0022\u0022.join(\u0022\u003Cli\u003E%s\u003C/li\u003E\u0022 % esc(line) for line in self.advisor.findings(e, base, result, resource))),\n            \u0022ladder_chart\u0022: self._ladder_chart(ladder, resource, shock),\n            \u0022tornado_chart\u0022: self._tornado_chart(e.sensitivity(10.0)),\n            \u0022margin_chart\u0022: self._margin_chart(result),\n            \u0022structure_chart\u0022: chart(\u0022donut\u0022, [{\u0022Pozycja\u0022: k, \u0022z\u0142\u0022: round(v)} for k, v in e.cost_structure().items()], labels=\u0022Pozycja\u0022, values=\u0022z\u0142\u0022, height=320),\n            \u0022product_rows\u0022: self._product_rows(result),\n            \u0022risk_count\u0022: len(result.at_risk()),\n            \u0022scan_tree\u0022: scan.tree_text(),\n            \u0022relations_html\u0022: html(\u0022\u003Cul\u003E%s\u003C/ul\u003E\u0022 % \u0022\u0022.join(\u0022\u003Cli\u003E%s\u003C/li\u003E\u0022 % esc(r) for r in scan.relations())),\n            \u0022pipeline_rows\u0022: scan.pipeline_rows(),\n            \u0022source_note\u0022: \u0022dane demonstracyjne wygenerowane przed chwil\u0105 w input/\u0022 if e.model.demo else \u0022dane z folderu input/\u0022,\n        }\n\n    def _ladder_chart(self, ladder, resource, chosen):\n        f = self.formatter\n        shocks = [r.scenario.shocks.get(resource, 0.0) for r in ladder]\n        names = [\u0022BASE\u0022 if not s else \u0022%\u002Bg%%\u0022 % s for s in shocks]\n        colors = [\u0022#3366cc\u0022 if not s else (\u0022#c0392b\u0022 if s == chosen else \u0022#f0ad4e\u0022) for s in shocks]\n        trace = {\u0022type\u0022: \u0022bar\u0022, \u0022x\u0022: names, \u0022y\u0022: [round(r.ebitda) for r in ladder], \u0022marker\u0022: {\u0022color\u0022: colors},\n                 \u0022text\u0022: [f.short_zl(r.ebitda) \u002B \u0022\u003Cbr\u003E\u0022 \u002B f.pct(r.ebitda_margin) for r in ladder], \u0022textposition\u0022: \u0022outside\u0022}\n        layout = {\u0022height\u0022: 330, \u0022margin\u0022: {\u0022l\u0022: 60, \u0022r\u0022: 20, \u0022t\u0022: 30, \u0022b\u0022: 40}, \u0022yaxis\u0022: {\u0022title\u0022: {\u0022text\u0022: \u0022EBITDA [z\u0142]\u0022}},\n                  \u0022paper_bgcolor\u0022: \u0022rgba(0,0,0,0)\u0022, \u0022plot_bgcolor\u0022: \u0022rgba(0,0,0,0)\u0022, \u0022showlegend\u0022: False}\n        return plotly({\u0022data\u0022: [trace], \u0022layout\u0022: layout}, height=330)\n\n    def _tornado_chart(self, impact):\n        f = self.formatter\n        names = list(impact)[::-1]\n        values = [round(impact[n]) for n in names]\n        trace = {\u0022type\u0022: \u0022bar\u0022, \u0022orientation\u0022: \u0022h\u0022, \u0022y\u0022: names, \u0022x\u0022: values, \u0022marker\u0022: {\u0022color\u0022: \u0022#d9534f\u0022},\n                 \u0022text\u0022: [f.short_zl(v) for v in values], \u0022textposition\u0022: \u0022auto\u0022}\n        layout = {\u0022height\u0022: 330, \u0022margin\u0022: {\u0022l\u0022: 160, \u0022r\u0022: 20, \u0022t\u0022: 30, \u0022b\u0022: 40}, \u0022xaxis\u0022: {\u0022title\u0022: {\u0022text\u0022: \u0022zmiana EBITDA przy \u002B10% ceny\u0022}},\n                  \u0022paper_bgcolor\u0022: \u0022rgba(0,0,0,0)\u0022, \u0022plot_bgcolor\u0022: \u0022rgba(0,0,0,0)\u0022, \u0022showlegend\u0022: False}\n        return plotly({\u0022data\u0022: [trace], \u0022layout\u0022: layout}, height=330)\n\n    def _margin_chart(self, result):\n        rows = [{\u0022Produkt\u0022: p.name.split(\u0022 (\u0022)[0], \u0022Przed\u0022: round(p.base_margin_pct, 1), \u0022Po\u0022: round(p.margin_pct, 1)} for p in result.products]\n        return chart(\u0022bar\u0022, rows, x=\u0022Produkt\u0022, y=[\u0022Przed\u0022, \u0022Po\u0022], height=330, y_title=\u0022mar\u017Ca pokrycia %\u0022, colors=[\u0022#3366cc\u0022, \u0022#d9534f\u0022])\n\n    def _product_rows(self, result):\n        return [{\u0022Produkt\u0022: p.name, \u0022Cena\u0022: round(p.price, 2), \u0022Koszt jedn. przed\u0022: round(p.base_unit_cost, 2),\n                 \u0022Koszt jedn. po\u0022: round(p.unit_cost, 2), \u0022Mar\u017Ca przed %\u0022: round(p.base_margin_pct, 1),\n                 \u0022Mar\u017Ca po %\u0022: round(p.margin_pct, 1), \u0022Potrzebna podwy\u017Cka %\u0022: round(p.required_price_increase_pct, 1),\n                 \u0022Wolumen\u0022: round(p.volume), \u0022Status\u0022: p.status} for p in sorted(result.products, key=lambda p: p.margin_pct)]\n\n    def _kpi(self, label, value, delta=None, change=0.0, good_up=True):\n        \u0022\u0022\u0022Kafelek KPI: strza\u0142ka i kolor bior\u0105 si\u0119 z liczby change, a opis zmiany (delta) jest ju\u017C po polsku.\u0022\u0022\u0022\n        extra = \u0022\u0022\n        if delta is not None:\n            tone = \u0022cn-good\u0022 if (change \u003E= 0) == good_up else \u0022cn-bad\u0022\n            arrow = \u0022\u25B2\u0022 if change \u003E 0 else (\u0022\u25BC\u0022 if change \u003C 0 else \u0022\u2022\u0022)\n            extra = \u0027\u003Cdiv class=\u0022cn-kpi-delta %s\u0022\u003E%s %s\u003C/div\u003E\u0027 % (tone, arrow, esc(delta))\n        return html(\u0027\u003Cdiv class=\u0022cn-kpi\u0022\u003E\u003Cdiv class=\u0022cn-kpi-label\u0022\u003E%s\u003C/div\u003E\u003Cdiv class=\u0022cn-kpi-value\u0022\u003E%s\u003C/div\u003E%s\u003C/div\u003E\u0027\n                    % (esc(label), esc(value), extra))\n\n\n# \u2500\u2500 CatNip interactive report runtime \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n# Generated with the class above; everything here is shared by every interactive report of a\n# process through one hub, so two reports on one page of output never fight over stdin.\n#\n# The page lives in CatNip\u0027s Run Engine. It reaches this process as lines on stdin\n# (__CATNIP_UI__ {json}) and this process answers through the ordinary visual stream\n# (__VISUAL_START__ {\u0022type\u0022: \u0022interactive\u0022, ...} __VISUAL_END__) \u2014 the two channels every kind of\n# run already has, locally, in Docker, in a compiled executable and on the CatNip Server.\n\n_IR_PREFIX = \u0027__CATNIP_UI__\u0027\n_IR_LOCAL = _ir_threading.local()\n\n\nclass Html(str):\n    \u0022\u0022\u0022Text that goes into the page as HTML instead of being escaped.\u0022\u0022\u0022\n    __slots__ = ()\n\n    def __html__(self):\n        return str(self)\n\n\ndef html(text):\n    \u0022\u0022\u0022Marks text as HTML, to be inserted as it is.\u0022\u0022\u0022\n    return Html(\u0027\u0027 if text is None else text)\n\n\ndef esc(value):\n    \u0022\u0022\u0022Escapes a value for the page.\u0022\u0022\u0022\n    return _ir_html.escape(\u0027\u0027 if value is None else str(value), quote=True)\n\n\ndef fmt(value, spec=None):\n    \u0022\u0022\u0022Formats a value with a format spec (\u0027,.2f\u0027, \u0027.1%\u0027, ...); None reads as empty.\u0022\u0022\u0022\n    if value is None:\n        return \u0027\u0027\n    if not spec:\n        return str(value)\n    try:\n        return format(value, spec)\n    except (TypeError, ValueError):\n        return str(value)\n\n\n# \u2500\u2500 The hub: one per process \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\ndef _ir_hub():\n    hub = getattr(_ir_sys, \u0027_catnip_interactive_hub\u0027, None)\n    if hub is None:\n        hub = {\n            \u0027pages\u0027: {},\n            \u0027lock\u0027: _ir_threading.RLock(),\n            \u0027out\u0027: _ir_threading.Lock(),\n            \u0027reader\u0027: None,\n            \u0027keeper\u0027: None,\n            \u0027closed\u0027: _ir_threading.Event(),\n            \u0027eof\u0027: False,\n        }\n        setattr(_ir_sys, \u0027_catnip_interactive_hub\u0027, hub)\n    return hub\n\n\ndef _ir_engine():\n    \u0022\u0022\u0022True when a CatNip engine is listening on the other end of stdout and stdin.\u0022\u0022\u0022\n    env = _ir_os.environ\n    return bool(env.get(\u0027CATNIP_MAIN_PY\u0027) or env.get(\u0027CATNIP_SCRIPT\u0027)\n                or env.get(\u0027CATNIP_ENGINE\u0027) or env.get(\u0027CATNIP_INTERACTIVE\u0027))\n\n\ndef _ir_plain(value):\n    \u0022\u0022\u0022A value JSON can carry: numpy scalars, dates, decimals and the like are reduced to one.\u0022\u0022\u0022\n    if value is None or isinstance(value, (bool, int, str)):\n        return value\n    if isinstance(value, float):\n        return value if _ir_math.isfinite(value) else None\n    if isinstance(value, (list, tuple)):\n        return [_ir_plain(v) for v in value]\n    if isinstance(value, dict):\n        return {str(k): _ir_plain(v) for k, v in value.items()}\n    if hasattr(value, \u0027item\u0027) and not hasattr(value, \u0027__len__\u0027):\n        try:\n            return _ir_plain(value.item())\n        except Exception:\n            pass\n    if hasattr(value, \u0027tolist\u0027):\n        try:\n            return _ir_plain(value.tolist())\n        except Exception:\n            pass\n    if hasattr(value, \u0027isoformat\u0027):\n        try:\n            return value.isoformat()\n        except Exception:\n            pass\n    try:\n        import decimal\n        if isinstance(value, decimal.Decimal):\n            return float(value)\n    except Exception:\n        pass\n    return str(value)\n\n\ndef _ir_json(value):\n    return _ir_json_module.dumps(_ir_plain(value), separators=(\u0027,\u0027, \u0027:\u0027), ensure_ascii=False)\n\n\ndef _ir_send(message):\n    body = _ir_json(message).encode(\u0027utf-8\u0027)\n    payload = _ir_json_module.dumps({\n        \u0027type\u0027: \u0027interactive\u0027,\n        \u0027title\u0027: message.get(\u0027title\u0027, \u0027\u0027),\n        \u0027data\u0027: _ir_base64.b64encode(body).decode(\u0027ascii\u0027),\n    })\n    with _ir_hub()[\u0027out\u0027]:\n        _ir_sys.stdout.write(\u0027__VISUAL_START__\u0027 \u002B payload \u002B \u0027__VISUAL_END__\\n\u0027)\n        _ir_sys.stdout.flush()\n\n\ndef _ir_register(page, keep_alive):\n    hub = _ir_hub()\n    with hub[\u0027lock\u0027]:\n        hub[\u0027pages\u0027][page._ir[\u0027id\u0027]] = page\n        if hub[\u0027eof\u0027]:\n            return\n        if hub[\u0027reader\u0027] is None:\n            hub[\u0027reader\u0027] = _ir_threading.Thread(target=_ir_read_loop, name=\u0027catnip-interactive\u0027, daemon=True)\n            hub[\u0027reader\u0027].start()\n        # The keeper is what keeps the process alive after the flow finished: the reader is a\n        # daemon thread and would die with the main one.\n        if keep_alive and hub[\u0027keeper\u0027] is None:\n            hub[\u0027keeper\u0027] = _ir_threading.Thread(target=hub[\u0027closed\u0027].wait, name=\u0027catnip-interactive-keeper\u0027)\n            hub[\u0027keeper\u0027].start()\n\n\ndef _ir_unregister(page_id):\n    hub = _ir_hub()\n    with hub[\u0027lock\u0027]:\n        hub[\u0027pages\u0027].pop(page_id, None)\n        if not hub[\u0027pages\u0027]:\n            hub[\u0027closed\u0027].set()\n\n\ndef _ir_read_loop():\n    hub = _ir_hub()\n    stream = _ir_sys.stdin\n    while True:\n        try:\n            line = stream.readline() if stream is not None else \u0027\u0027\n        except Exception:\n            line = \u0027\u0027\n        if not line:\n            # Nobody will ever answer again (the run was stopped, or nothing was attached):\n            # whoever is waiting for a click must be let go, and the process may end.\n            with hub[\u0027lock\u0027]:\n                hub[\u0027eof\u0027] = True\n                pages = list(hub[\u0027pages\u0027].values())\n            for page in pages:\n                _ir_release_waiters(page)\n            hub[\u0027closed\u0027].set()\n            return\n        line = line.strip()\n        if not line.startswith(_IR_PREFIX):\n            continue\n        try:\n            message = _ir_json_module.loads(line[len(_IR_PREFIX):])\n        except ValueError:\n            continue\n        with hub[\u0027lock\u0027]:\n            page = hub[\u0027pages\u0027].get(message.get(\u0027page\u0027))\n        if page is None:\n            continue\n        try:\n            _ir_dispatch(page, message)\n        except Exception:\n            _ir_traceback.print_exc()\n\n\n# \u2500\u2500 A page \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\ndef _ir_init(page, inputs):\n    page.state = {}\n    page._ir = {\n        \u0027id\u0027: _ir_uuid.uuid4().hex,\n        \u0027shown\u0027: False,\n        \u0027closed\u0027: False,\n        \u0027bindings\u0027: {},\n        \u0027waiters\u0027: {},\n        \u0027pending\u0027: {},\n        \u0027controls\u0027: {},\n        \u0027counter\u0027: 0,\n        \u0027inputs\u0027: inputs,\n        \u0027lock\u0027: _ir_threading.RLock(),\n    }\n    setup = getattr(page, \u0027setup\u0027, None)\n    if callable(setup):\n        setup()\n\n\ndef _ir_show(page):\n    ir = page._ir\n    if ir[\u0027closed\u0027]:\n        return None\n    if not _ir_engine():\n        print(\u0027[CatNip] %s: an interactive report is shown by the CatNip Run Engine; \u0027\n              \u0027outside it there is no page to show.\u0027 % type(page).TITLE, flush=True)\n        return None\n    if _ir_sys.gettrace() is not None:\n        # A debugger reads stdin too, and the page would steal its commands.\n        print(\u0027[CatNip] %s: the page stays static while debugging.\u0027 % type(page).TITLE, flush=True)\n        ir[\u0027shown\u0027] = True\n        _ir_push(page, interactive=False)\n        return None\n    ir[\u0027shown\u0027] = True\n    _ir_register(page, type(page).KEEP_ALIVE)\n    _ir_push(page)\n    return None\n\n\ndef _ir_push(page, interactive=True):\n    \u0022\u0022\u0022Renders the page and sends it; the Run Engine replaces the card with the same id.\u0022\u0022\u0022\n    cls = type(page)\n    try:\n        body = _ir_render(page)\n    except Exception as ex:\n        _ir_traceback.print_exc()\n        body = \u0027\u003Cdiv class=\u0022cn-error-page\u0022\u003E\u003Cb\u003EThe page could not be rendered.\u003C/b\u003E\u003Cpre\u003E%s\u003C/pre\u003E\u003C/div\u003E\u0027 % esc(\n            \u0027%s: %s\u0027 % (type(ex).__name__, ex))\n    _ir_send({\n        \u0027op\u0027: \u0027render\u0027,\n        \u0027id\u0027: page._ir[\u0027id\u0027],\n        \u0027title\u0027: cls.TITLE,\n        \u0027height\u0027: cls.HEIGHT,\n        \u0027css\u0027: cls.STYLE,\n        \u0027html\u0027: body,\n        \u0027interactive\u0027: interactive,\n        \u0027actions\u0027: dict(cls.ACTIONS),\n    })\n\n\ndef _ir_namespace(page):\n    namespace = dict(globals())\n    prepare = getattr(page, \u0027prepare\u0027, None)\n    extra = prepare() if callable(prepare) else None\n    namespace.update(page.state)\n    for name, value in page._ir[\u0027inputs\u0027].items():\n        namespace[name] = getattr(page, name, value)\n    namespace.update({\u0027self\u0027: page, \u0027state\u0027: page.state, \u0027data\u0027: page.data, \u0027title\u0027: type(page).TITLE})\n    if isinstance(extra, dict):\n        namespace.update(extra)\n    return namespace\n\n\ndef _ir_render(page):\n    with page._ir[\u0027lock\u0027]:\n        page._ir[\u0027counter\u0027] = 0\n        page._ir[\u0027controls\u0027] = {}\n        previous = (getattr(_IR_LOCAL, \u0027page\u0027, None), getattr(_IR_LOCAL, \u0027namespace\u0027, None))\n        _IR_LOCAL.page = page\n        _IR_LOCAL.namespace = None\n        try:\n            namespace = _ir_namespace(page)\n            # A control placed further up gives its state value a default as it renders; the holes\n            # below it must see that value, so the namespace is shared with _ir_default.\n            _IR_LOCAL.namespace = namespace\n            return _ir_template(type(page).MARKUP, namespace)\n        finally:\n            _IR_LOCAL.page, _IR_LOCAL.namespace = previous\n\n\ndef _ir_current():\n    page = getattr(_IR_LOCAL, \u0027page\u0027, None)\n    if page is None:\n        raise RuntimeError(\u0027controls, charts and tables are placed from the markup, while the page renders\u0027)\n    return page\n\n\ndef _ir_next_id(prefix):\n    page = getattr(_IR_LOCAL, \u0027page\u0027, None)\n    if page is None:\n        return \u0027cn-%s-%s\u0027 % (prefix, _ir_uuid.uuid4().hex[:8])\n    page._ir[\u0027counter\u0027] \u002B= 1\n    return \u0027cn-%s-%d\u0027 % (prefix, page._ir[\u0027counter\u0027])\n\n\ndef _ir_dispatch(page, message):\n    op = message.get(\u0027op\u0027)\n    if op == \u0027ready\u0027:\n        _ir_push(page)\n        return\n    if op == \u0027close\u0027:\n        _ir_close(page, notify=False)\n        return\n    if op == \u0027change\u0027:\n        name = str(message.get(\u0027name\u0027) or \u0027\u0027)\n        if not name:\n            return\n        value = message.get(\u0027value\u0027)\n        page.state[name] = value\n        hook = getattr(page, \u0027on_%s_change\u0027 % name, None)\n        if callable(hook):\n            _ir_guard(page, hook, value)\n        else:\n            hook = getattr(page, \u0027on_change\u0027, None)\n            if callable(hook):\n                _ir_guard(page, hook, name, value)\n        _ir_push(page)\n        return\n    if op == \u0027call\u0027:\n        name = str(message.get(\u0027name\u0027) or \u0027\u0027)\n        method = getattr(page, name, None) if name and not name.startswith(\u0027_\u0027) else None\n        if callable(method):\n            _ir_guard(page, method)\n        else:\n            page.toast(\u0027The page has no method called %s.\u0027 % name, \u0027error\u0027)\n        _ir_push(page)\n        return\n    if op == \u0027action\u0027:\n        _ir_fire(page, str(message.get(\u0027name\u0027) or \u0027\u0027))\n\n\ndef _ir_guard(page, func, *args):\n    try:\n        return func(*args)\n    except Exception as ex:\n        _ir_traceback.print_exc()\n        page.toast(\u0027%s: %s\u0027 % (type(ex).__name__, ex), \u0027error\u0027)\n        return None\n\n\ndef _ir_payload(page, name):\n    values = dict(page.state)\n    hook = getattr(page, \u0027on_\u0027 \u002B name, None)\n    if callable(hook):\n        result = hook(values)\n        if result is not None:\n            return result\n    return values\n\n\ndef _ir_fire(page, name):\n    ir = page._ir\n    if name not in type(page).ACTIONS:\n        page.toast(\u0027The page has no action called %s.\u0027 % name, \u0027error\u0027)\n        return\n    with ir[\u0027lock\u0027]:\n        waiter = ir[\u0027waiters\u0027].pop(name, None)\n        binding = ir[\u0027bindings\u0027].get(name)\n    try:\n        payload = _ir_payload(page, name)\n    except Exception as ex:\n        _ir_traceback.print_exc()\n        page.toast(\u0027%s: %s\u0027 % (type(ex).__name__, ex), \u0027error\u0027)\n        return\n    if waiter is not None:\n        waiter[\u0027payload\u0027] = payload\n        waiter[\u0027event\u0027].set()\n        return\n    if (binding is None and type(page).ACTIONS.get(name) == \u0027live\u0027\n            and _ir_threading.main_thread().is_alive()\n            and _ir_os.environ.get(\u0027CATNIP_INTERACTIVE\u0027) != \u0027preview\u0027):\n        # The generated main binds live actions after the rest of the flow has been called, and\n        # the flow may still be on its way there (waiting at a submit, say): the click is kept\n        # and handled the moment the binding arrives.\n        with ir[\u0027lock\u0027]:\n            ir[\u0027pending\u0027][name] = payload\n        page.toast(\u0027\u0022%s\u0022 runs as soon as the flow reaches it.\u0027 % name, \u0027info\u0027)\n        return\n    if binding is None:\n        if _ir_os.environ.get(\u0027CATNIP_INTERACTIVE\u0027) == \u0027preview\u0027:\n            page.toast(\u0027%s would hand over: %s\u0027 % (name, _ir_json(payload)[:400]), \u0027info\u0027)\n        else:\n            page.toast(\u0027Nothing is waiting for \u0022%s\u0022 \u2014 connect a block to its output and run the generated main.\u0027 % name, \u0027warning\u0027)\n        return\n    _ir_run_binding(page, name, binding, payload)\n\n\ndef _ir_run_binding(page, name, binding, payload):\n    ir = page._ir\n    _ir_send({\u0027op\u0027: \u0027busy\u0027, \u0027id\u0027: ir[\u0027id\u0027], \u0027on\u0027: True, \u0027label\u0027: name})\n    try:\n        _ir_guard(page, binding, payload)\n    finally:\n        _ir_send({\u0027op\u0027: \u0027busy\u0027, \u0027id\u0027: ir[\u0027id\u0027], \u0027on\u0027: False})\n        _ir_push(page)\n\n\ndef _ir_bind(page, name, handler):\n    ir = page._ir\n    with ir[\u0027lock\u0027]:\n        ir[\u0027bindings\u0027][name] = handler\n        pending = ir[\u0027pending\u0027].pop(name, None)\n    if pending is not None:\n        _ir_run_binding(page, name, handler, pending)\n\n\ndef _ir_wait(page, name):\n    \u0022\u0022\u0022The output of a submit action: shows the page if it is not shown, then waits for the click.\u0022\u0022\u0022\n    ir = page._ir\n    if not ir[\u0027shown\u0027]:\n        page.show()\n    hub = _ir_hub()\n    if ir[\u0027closed\u0027] or not _ir_engine() or hub[\u0027eof\u0027] or _ir_sys.gettrace() is not None:\n        # Nobody can click: carry on with what the page holds.\n        return _ir_payload(page, name)\n    waiter = {\u0027event\u0027: _ir_threading.Event(), \u0027payload\u0027: None}\n    with ir[\u0027lock\u0027]:\n        ir[\u0027waiters\u0027][name] = waiter\n    _ir_send({\u0027op\u0027: \u0027waiting\u0027, \u0027id\u0027: ir[\u0027id\u0027], \u0027action\u0027: name})\n    waiter[\u0027event\u0027].wait()\n    _ir_send({\u0027op\u0027: \u0027waiting\u0027, \u0027id\u0027: ir[\u0027id\u0027], \u0027action\u0027: None})\n    return waiter[\u0027payload\u0027]\n\n\ndef _ir_release_waiters(page):\n    with page._ir[\u0027lock\u0027]:\n        waiters = list(page._ir[\u0027waiters\u0027].values())\n        page._ir[\u0027waiters\u0027].clear()\n    for waiter in waiters:\n        waiter[\u0027event\u0027].set()\n\n\ndef _ir_close(page, notify=True):\n    ir = page._ir\n    if ir[\u0027closed\u0027]:\n        return\n    ir[\u0027closed\u0027] = True\n    _ir_release_waiters(page)\n    if notify and ir[\u0027shown\u0027]:\n        _ir_send({\u0027op\u0027: \u0027close\u0027, \u0027id\u0027: ir[\u0027id\u0027]})\n    _ir_unregister(ir[\u0027id\u0027])\n\n\n# \u2500\u2500 The template: HTML with {python} holes \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n_IR_COMPILED = {}\n\n\ndef _ir_template(text, namespace):\n    out = []\n    i = 0\n    n = len(text)\n    lower = text.lower()\n    while i \u003C n:\n        c = text[i]\n        if c == \u0027\u003C\u0027 and (lower.startswith(\u0027\u003Cscript\u0027, i) or lower.startswith(\u0027\u003Cstyle\u0027, i)):\n            # Script and style blocks are copied as they are: their braces are not holes.\n            tag = \u0027script\u0027 if lower.startswith(\u0027\u003Cscript\u0027, i) else \u0027style\u0027\n            end = lower.find(\u0027\u003C/\u0027 \u002B tag, i)\n            end = n if end \u003C 0 else lower.find(\u0027\u003E\u0027, end) \u002B 1 or n\n            out.append(text[i:end])\n            i = end\n            continue\n        if c == \u0027{\u0027:\n            if text.startswith(\u0027{{\u0027, i):\n                out.append(\u0027{\u0027)\n                i \u002B= 2\n                continue\n            close = _ir_matching(text, i)\n            if close \u003C 0:\n                out.append(text[i:])\n                break\n            out.append(_ir_hole(text[i \u002B 1:close], namespace))\n            i = close \u002B 1\n            continue\n        if c == \u0027}\u0027:\n            out.append(\u0027}\u0027)\n            i \u002B= 2 if text.startswith(\u0027}}\u0027, i) else 1\n            continue\n        nxt = min([p for p in (text.find(\u0027{\u0027, i), text.find(\u0027}\u0027, i), lower.find(\u0027\u003Cs\u0027, i)) if p \u003E= 0] or [n])\n        if nxt == i:\n            nxt = i \u002B 1\n        out.append(text[i:nxt])\n        i = nxt\n    return \u0027\u0027.join(out)\n\n\ndef _ir_matching(text, start):\n    \u0022\u0022\u0022The brace closing the one at start, skipping braces inside strings and nested brackets.\u0022\u0022\u0022\n    depth = 0\n    quote = None\n    i = start\n    while i \u003C len(text):\n        c = text[i]\n        if quote:\n            if c == \u0027\\\\\u0027:\n                i \u002B= 2\n                continue\n            if text.startswith(quote, i):\n                i \u002B= len(quote)\n                quote = None\n                continue\n        elif c in \u0027\\\u0027\u0022\u0027:\n            quote = c * 3 if text.startswith(c * 3, i) else c\n            i \u002B= len(quote)\n            continue\n        elif c in \u0027{[(\u0027:\n            depth \u002B= 1\n        elif c in \u0027}])\u0027:\n            depth -= 1\n            if depth == 0:\n                return i\n        i \u002B= 1\n    return -1\n\n\ndef _ir_hole(expression, namespace):\n    raw = expression.startswith(\u0027!\u0027)\n    source = expression[1:] if raw else expression\n    source = source.strip()\n    if not source:\n        return \u0027\u0027\n    try:\n        code = _IR_COMPILED.get(source)\n        if code is None:\n            code = compile(source, \u0027\u003Cmarkup {%s}\u003E\u0027 % source[:60], \u0027eval\u0027)\n            _IR_COMPILED[source] = code\n        value = eval(code, namespace)\n    except Exception as ex:\n        return \u0027\u003Cspan class=\u0022cn-error\u0022 title=\u0022%s\u0022\u003E{%s} \u2192 %s: %s\u003C/span\u003E\u0027 % (\n            esc(source), esc(source[:80]), esc(type(ex).__name__), esc(ex))\n    return _ir_value(value, raw)\n\n\ndef _ir_value(value, raw=False):\n    if value is None:\n        return \u0027\u0027\n    if hasattr(value, \u0027__html__\u0027):\n        return str(value.__html__())\n    if raw:\n        return str(value)\n    if hasattr(value, \u0027to_plotly_json\u0027):\n        return plotly(value)\n    if hasattr(value, \u0027savefig\u0027):\n        return figure(value)\n    if hasattr(value, \u0027columns\u0027) and hasattr(value, \u0027itertuples\u0027):\n        return table(value)\n    if isinstance(value, float):\n        return esc(_ir_number(value))\n    return esc(value)\n\n\ndef _ir_number(value):\n    if value != value:\n        return \u0027\u0027\n    if float(value).is_integer() and abs(value) \u003C 1e15:\n        return str(int(value))\n    return (\u0027%.6g\u0027 % value) if abs(value) \u003C 1e-4 or abs(value) \u003E= 1e15 else str(round(value, 6))\n\n\n# \u2500\u2500 Data shapes \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\ndef _ir_table(rows, columns=None, limit=0):\n    \u0022\u0022\u0022(headers, rows of values) out of a DataFrame, numpy array, dict of columns, list of dicts\n    or list of rows \u2014 resolved when the page renders, so the data may change shape between runs.\u0022\u0022\u0022\n    if rows is None:\n        return [], []\n    limit = int(limit or 0)\n    if hasattr(rows, \u0027columns\u0027) and hasattr(rows, \u0027itertuples\u0027):\n        frame = rows[list(columns)] if columns else rows\n        if limit \u003E 0:\n            frame = frame.head(limit)\n        return [str(c) for c in frame.columns], [list(r) for r in frame.itertuples(index=False, name=None)]\n    if hasattr(rows, \u0027column_names\u0027) and hasattr(rows, \u0027to_pylist\u0027):          # pyarrow Table\n        return _ir_table(rows.to_pylist(), columns, limit)\n    if hasattr(rows, \u0027tolist\u0027) and not isinstance(rows, (list, tuple, dict)):\n        rows = rows.tolist()\n    if isinstance(rows, dict):\n        headers = [str(k) for k in (columns or rows.keys())]\n        cols = [rows.get(h, []) for h in headers]\n        cols = [c.tolist() if hasattr(c, \u0027tolist\u0027) else list(c) if hasattr(c, \u0027__iter__\u0027) and not isinstance(c, str) else [c] for c in cols]\n        length = max((len(c) for c in cols), default=0)\n        if limit \u003E 0:\n            length = min(length, limit)\n        return headers, [[c[i] if i \u003C len(c) else None for c in cols] for i in range(length)]\n    rows = list(rows)\n    if not rows:\n        return [str(c) for c in (columns or [])], []\n    if limit \u003E 0:\n        rows = rows[:limit]\n    if isinstance(rows[0], dict):\n        headers = [str(k) for k in (columns or rows[0].keys())]\n        return headers, [[row.get(h) for h in headers] for row in rows]\n    if hasattr(rows[0], \u0027_fields\u0027):                                            # namedtuple\n        headers = list(columns or rows[0]._fields)\n        return headers, [[getattr(row, h, None) for h in headers] for row in rows]\n    cells = [list(row) if hasattr(row, \u0027__iter__\u0027) and not isinstance(row, str) else [row] for row in rows]\n    width = max(len(r) for r in cells)\n    headers = [str(c) for c in columns] if columns else [\u0027Column %d\u0027 % (i \u002B 1) for i in range(width)]\n    return headers, cells\n\n\ndef rows_of(data, columns=None):\n    \u0022\u0022\u0022Any tabular shape as a list of dicts \u2014 the easiest form to compute with in a report.\u0022\u0022\u0022\n    if data is None:\n        return []\n    headers, cells = _ir_table(data, columns)\n    return [dict(zip(headers, row)) for row in cells]\n\n\ndef column(data, key):\n    \u0022\u0022\u0022One column of any tabular shape as a list; a sequence passed as the key comes back as a list.\u0022\u0022\u0022\n    if key is None:\n        return None\n    if not isinstance(key, str):\n        return key.tolist() if hasattr(key, \u0027tolist\u0027) else list(key)\n    if data is None:\n        raise KeyError(\u0027no data to take the column %r from\u0027 % key)\n    if hasattr(data, \u0027columns\u0027) and hasattr(data, \u0027itertuples\u0027):\n        return data[key].tolist()\n    if isinstance(data, dict):\n        values = data[key]\n        return values.tolist() if hasattr(values, \u0027tolist\u0027) else list(values)\n    headers, cells = _ir_table(data)\n    if key not in headers:\n        raise KeyError(\u0027no column %r \u2014 the data has %s\u0027 % (key, \u0027, \u0027.join(headers) or \u0027no columns\u0027))\n    index = headers.index(key)\n    return [row[index] if index \u003C len(row) else None for row in cells]\n\n\ndef _ir_data(data):\n    if data is None:\n        page = getattr(_IR_LOCAL, \u0027page\u0027, None)\n        return page.data if page is not None else None\n    return data\n\n\ndef _ir_attrs(**attributes):\n    parts = []\n    for key, value in attributes.items():\n        if value is None or value is False:\n            continue\n        key = key.rstrip(\u0027_\u0027).replace(\u0027_\u0027, \u0027-\u0027)\n        parts.append(key if value is True else \u0027%s=\u0022%s\u0022\u0027 % (key, esc(value)))\n    return \u0027 \u0027.join(parts)\n\n\ndef _ir_json_block(value):\n    return _ir_json(value).replace(\u0027\u003C/\u0027, \u0027\u003C\\\\/\u0027)\n\n\ndef _ir_label(label, for_id, body, css=\u0027cn-field\u0027):\n    caption = \u0027\u003Clabel class=\u0022cn-label\u0022 for=\u0022%s\u0022\u003E%s\u003C/label\u003E\u0027 % (for_id, esc(label)) if label else \u0027\u0027\n    return Html(\u0027\u003Cdiv class=\u0022%s\u0022\u003E%s%s\u003C/div\u003E\u0027 % (css, caption, body))\n\n\ndef _ir_default(name, value):\n    page = _ir_current()\n    if name not in page.state:\n        page.state[name] = value\n        namespace = getattr(_IR_LOCAL, \u0027namespace\u0027, None)\n        if namespace is not None:\n            namespace.setdefault(name, value)\n    page._ir[\u0027controls\u0027][name] = True\n    return page.state[name]\n\n\n# \u2500\u2500 Controls: each one is bound to the state value of its name \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\ndef slider(name, min=0, max=100, step=1, value=None, label=None, live=False, format=None):\n    \u0022\u0022\u0022A slider; the state value changes when it is released, or while dragging with live=True.\u0022\u0022\u0022\n    current = _ir_default(name, min if value is None else value)\n    control_id = \u0027cn-\u0027 \u002B name\n    shown = fmt(current, format)\n    body = (\u0027\u003Cdiv class=\u0022cn-slider-row\u0022\u003E\u003Cinput type=\u0022range\u0022 %s/\u003E\u003Coutput class=\u0022cn-slider-value\u0022 data-cn-format=\u0022%s\u0022\u003E%s\u003C/output\u003E\u003C/div\u003E\u0027\n            % (_ir_attrs(id=control_id, class_=\u0027cn-slider\u0027, min=min, max=max, step=step, value=current,\n                         data_cn_bind=name, data_cn_type=\u0027number\u0027, data_cn_live=\u00271\u0027 if live else None),\n               esc(format or \u0027\u0027), esc(shown)))\n    return _ir_label(label, control_id, body)\n\n\ndef number(name, value=None, min=None, max=None, step=None, label=None, integer=False):\n    \u0022\u0022\u0022A number box.\u0022\u0022\u0022\n    current = _ir_default(name, 0 if value is None else value)\n    control_id = \u0027cn-\u0027 \u002B name\n    body = \u0027\u003Cinput type=\u0022number\u0022 %s/\u003E\u0027 % _ir_attrs(\n        id=control_id, class_=\u0027cn-input\u0027, value=current, min=min, max=max, step=step if step is not None else (1 if integer else \u0027any\u0027),\n        data_cn_bind=name, data_cn_type=\u0027int\u0027 if integer else \u0027number\u0027)\n    return _ir_label(label, control_id, body)\n\n\ndef text_input(name, value=\u0027\u0027, label=None, placeholder=None):\n    \u0022\u0022\u0022A one-line text box; the state value changes when it loses focus or Enter is pressed.\u0022\u0022\u0022\n    current = _ir_default(name, value)\n    control_id = \u0027cn-\u0027 \u002B name\n    body = \u0027\u003Cinput type=\u0022text\u0022 %s/\u003E\u0027 % _ir_attrs(\n        id=control_id, class_=\u0027cn-input\u0027, value=current, placeholder=placeholder, data_cn_bind=name, data_cn_type=\u0027text\u0027)\n    return _ir_label(label, control_id, body)\n\n\ndef textarea(name, value=\u0027\u0027, label=None, rows=4, placeholder=None):\n    \u0022\u0022\u0022A multi-line text box.\u0022\u0022\u0022\n    current = _ir_default(name, value)\n    control_id = \u0027cn-\u0027 \u002B name\n    body = \u0027\u003Ctextarea %s\u003E%s\u003C/textarea\u003E\u0027 % (_ir_attrs(\n        id=control_id, class_=\u0027cn-input\u0027, rows=rows, placeholder=placeholder, data_cn_bind=name, data_cn_type=\u0027text\u0027), esc(current))\n    return _ir_label(label, control_id, body)\n\n\ndef _ir_options(options):\n    if options is None:\n        return []\n    if isinstance(options, dict):\n        return [(k, v) for k, v in options.items()]\n    if hasattr(options, \u0027tolist\u0027):\n        options = options.tolist()\n    result = []\n    for option in options:\n        if isinstance(option, (list, tuple)) and len(option) == 2:\n            result.append((option[0], option[1]))\n        else:\n            result.append((option, option))\n    return result\n\n\ndef _ir_option_type(pairs):\n    values = [v for v, _ in pairs]\n    if values and all(isinstance(v, bool) for v in values):\n        return \u0027bool\u0027\n    if values and all(isinstance(v, int) and not isinstance(v, bool) for v in values):\n        return \u0027int\u0027\n    if values and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in values):\n        return \u0027number\u0027\n    return \u0027text\u0027\n\n\ndef select(name, options, value=None, label=None):\n    \u0022\u0022\u0022A combo box. Options are values, (value, caption) pairs or a {value: caption} dictionary.\u0022\u0022\u0022\n    pairs = _ir_options(options)\n    current = _ir_default(name, value if value is not None else (pairs[0][0] if pairs else None))\n    control_id = \u0027cn-\u0027 \u002B name\n    items = \u0027\u0027.join(\u0027\u003Coption value=\u0022%s\u0022%s\u003E%s\u003C/option\u003E\u0027 % (esc(v), \u0027 selected\u0027 if v == current else \u0027\u0027, esc(c)) for v, c in pairs)\n    body = \u0027\u003Cselect %s\u003E%s\u003C/select\u003E\u0027 % (_ir_attrs(\n        id=control_id, class_=\u0027cn-input\u0027, data_cn_bind=name, data_cn_type=_ir_option_type(pairs)), items)\n    return _ir_label(label, control_id, body)\n\n\ndef multiselect(name, options, value=None, label=None, size=5):\n    \u0022\u0022\u0022A list in which several options may be chosen; the state value is a list.\u0022\u0022\u0022\n    pairs = _ir_options(options)\n    current = _ir_default(name, list(value or []))\n    control_id = \u0027cn-\u0027 \u002B name\n    items = \u0027\u0027.join(\u0027\u003Coption value=\u0022%s\u0022%s\u003E%s\u003C/option\u003E\u0027 % (esc(v), \u0027 selected\u0027 if v in (current or []) else \u0027\u0027, esc(c)) for v, c in pairs)\n    body = \u0027\u003Cselect multiple %s\u003E%s\u003C/select\u003E\u0027 % (_ir_attrs(\n        id=control_id, class_=\u0027cn-input\u0027, size=size, data_cn_bind=name, data_cn_type=\u0027multi:\u0027 \u002B _ir_option_type(pairs)), items)\n    return _ir_label(label, control_id, body)\n\n\ndef radio(name, options, value=None, label=None, inline=True):\n    \u0022\u0022\u0022A group of radio buttons.\u0022\u0022\u0022\n    pairs = _ir_options(options)\n    current = _ir_default(name, value if value is not None else (pairs[0][0] if pairs else None))\n    control_id = \u0027cn-\u0027 \u002B name\n    kind = _ir_option_type(pairs)\n    items = \u0027\u0027.join(\u0027\u003Clabel class=\u0022cn-choice\u0022\u003E\u003Cinput type=\u0022radio\u0022 name=\u0022%s\u0022 value=\u0022%s\u0022%s/\u003E %s\u003C/label\u003E\u0027\n                    % (control_id, esc(v), \u0027 checked\u0027 if v == current else \u0027\u0027, esc(c)) for v, c in pairs)\n    body = \u0027\u003Cdiv %s\u003E%s\u003C/div\u003E\u0027 % (_ir_attrs(id=control_id, class_=\u0027cn-radio\u0027 \u002B (\u0027 cn-inline\u0027 if inline else \u0027\u0027),\n                                           data_cn_bind=name, data_cn_type=kind), items)\n    return _ir_label(label, control_id, body)\n\n\ndef checkbox(name, label=\u0027\u0027, value=False):\n    \u0022\u0022\u0022A check box; the state value is True or False.\u0022\u0022\u0022\n    current = bool(_ir_default(name, bool(value)))\n    control_id = \u0027cn-\u0027 \u002B name\n    return Html(\u0027\u003Clabel class=\u0022cn-choice cn-field\u0022\u003E\u003Cinput type=\u0022checkbox\u0022 %s/\u003E %s\u003C/label\u003E\u0027 % (_ir_attrs(\n        id=control_id, checked=current, data_cn_bind=name, data_cn_type=\u0027bool\u0027), esc(label)))\n\n\ndef toggle(name, label=\u0027\u0027, value=False):\n    \u0022\u0022\u0022An on/off switch; the state value is True or False.\u0022\u0022\u0022\n    current = bool(_ir_default(name, bool(value)))\n    control_id = \u0027cn-\u0027 \u002B name\n    return Html(\u0027\u003Clabel class=\u0022cn-toggle cn-field\u0022\u003E\u003Cinput type=\u0022checkbox\u0022 %s/\u003E\u003Cspan class=\u0022cn-toggle-track\u0022\u003E\u003C/span\u003E %s\u003C/label\u003E\u0027 % (_ir_attrs(\n        id=control_id, checked=current, data_cn_bind=name, data_cn_type=\u0027bool\u0027), esc(label)))\n\n\ndef date_input(name, value=None, label=None):\n    \u0022\u0022\u0022A date picker; the state value is an ISO date string (\u00272026-10-05\u0027).\u0022\u0022\u0022\n    if value is not None and hasattr(value, \u0027isoformat\u0027):\n        value = value.isoformat()[:10]\n    current = _ir_default(name, value or \u0027\u0027)\n    control_id = \u0027cn-\u0027 \u002B name\n    body = \u0027\u003Cinput type=\u0022date\u0022 %s/\u003E\u0027 % _ir_attrs(id=control_id, class_=\u0027cn-input\u0027, value=current, data_cn_bind=name, data_cn_type=\u0027text\u0027)\n    return _ir_label(label, control_id, body)\n\n\ndef color_input(name, value=\u0027#3366cc\u0027, label=None):\n    \u0022\u0022\u0022A colour picker; the state value is \u0027#rrggbb\u0027.\u0022\u0022\u0022\n    current = _ir_default(name, value)\n    control_id = \u0027cn-\u0027 \u002B name\n    body = \u0027\u003Cinput type=\u0022color\u0022 %s/\u003E\u0027 % _ir_attrs(id=control_id, class_=\u0027cn-color\u0027, value=current, data_cn_bind=name, data_cn_type=\u0027text\u0027)\n    return _ir_label(label, control_id, body)\n\n\ndef button(label, action=None, call=None, kind=\u0027primary\u0027, confirm=None, disabled=False):\n    \u0022\u0022\u0022A button. action= fires one of the report\u0027s actions (an output of the block); call= runs a\n    method of the report and renders the page again.\u0022\u0022\u0022\n    return Html(\u0027\u003Cbutton type=\u0022button\u0022 %s\u003E%s\u003C/button\u003E\u0027 % (_ir_attrs(\n        class_=\u0027cn-button cn-\u0027 \u002B kind, data_cn_action=action, data_cn_call=call, data_cn_confirm=confirm,\n        disabled=bool(disabled)), esc(label)))\n\n\n# \u2500\u2500 Displays \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\ndef table(rows=None, columns=None, page_size=20, height=None, sortable=True, filter=True, select=None,\n          formats=None, max_rows=20000, id=None):\n    \u0022\u0022\u0022A table with sorting, filtering and pages. select= names a state value that receives the\n    clicked row as a dictionary.\u0022\u0022\u0022\n    headers, cells = _ir_table(_ir_data(rows), columns)\n    total = len(cells)\n    cells = cells[:max_rows] if max_rows else cells\n    if select:\n        _ir_default(select, None)\n    spec = {\n        \u0027columns\u0027: headers, \u0027rows\u0027: cells, \u0027total\u0027: total, \u0027pageSize\u0027: page_size,\n        \u0027sortable\u0027: sortable, \u0027filter\u0027: filter, \u0027select\u0027: select, \u0027formats\u0027: formats or {},\n    }\n    style = \u0027max-height:%dpx\u0027 % height if height else None\n    return Html(\u0027\u003Cdiv %s\u003E\u003Cscript type=\u0022application/json\u0022\u003E%s\u003C/script\u003E\u003C/div\u003E\u0027 % (_ir_attrs(\n        id=id or _ir_next_id(\u0027table\u0027), class_=\u0027cn-table\u0027, data_cn_table=\u00271\u0027, data_cn_opaque=\u00271\u0027, style=style),\n        _ir_json_block(spec)))\n\n\n_IR_PALETTE = [\u0027#3366cc\u0027, \u0027#dc3912\u0027, \u0027#ff9900\u0027, \u0027#109618\u0027, \u0027#990099\u0027, \u0027#0099c6\u0027, \u0027#dd4477\u0027, \u0027#66aa00\u0027, \u0027#b82e2e\u0027, \u0027#316395\u0027]\n\n\ndef _ir_series(data, keys):\n    if keys is None:\n        return []\n    if isinstance(keys, str):\n        return [(keys, column(data, keys))]\n    keys = keys.tolist() if hasattr(keys, \u0027tolist\u0027) else list(keys)\n    if keys and all(isinstance(k, str) for k in keys) and data is not None:\n        return [(k, column(data, k)) for k in keys]\n    if keys and all(isinstance(k, (list, tuple)) or hasattr(k, \u0027tolist\u0027) for k in keys):\n        return [(\u0027Series %d\u0027 % (i \u002B 1), column(None, k)) for i, k in enumerate(keys)]\n    return [(\u0027\u0027, keys)]\n\n\ndef chart(kind=\u0027line\u0027, data=None, x=None, y=None, labels=None, values=None, z=None, title=\u0027\u0027, height=360,\n          colors=None, x_title=None, y_title=None, legend=True, stacked=False, size=None, text=None,\n          min=None, max=None, layout=None, id=None, **trace):\n    \u0022\u0022\u0022A chart drawn with Plotly. kind: line, bar, barh, area, scatter, bubble, pie, donut,\n    histogram, box, violin, heatmap, funnel, waterfall, radar, treemap, sunburst, gauge,\n    indicator, candlestick. x/y/labels/values/z take column names of data or sequences; y may be\n    a list of column names to draw several series.\u0022\u0022\u0022\n    data = _ir_data(data)\n    kind = (kind or \u0027line\u0027).lower()\n    palette = list(colors) if colors else _IR_PALETTE\n    traces = []\n\n    if kind in (\u0027pie\u0027, \u0027donut\u0027, \u0027funnel\u0027, \u0027treemap\u0027, \u0027sunburst\u0027, \u0027funnelarea\u0027):\n        names = column(data, labels if labels is not None else x)\n        amounts = column(data, values if values is not None else y)\n        if kind in (\u0027pie\u0027, \u0027donut\u0027):\n            t = {\u0027type\u0027: \u0027pie\u0027, \u0027labels\u0027: names, \u0027values\u0027: amounts, \u0027marker\u0027: {\u0027colors\u0027: palette}, \u0027sort\u0027: False}\n            if kind == \u0027donut\u0027:\n                t[\u0027hole\u0027] = 0.5\n        elif kind == \u0027funnel\u0027:\n            t = {\u0027type\u0027: \u0027funnel\u0027, \u0027y\u0027: names, \u0027x\u0027: amounts, \u0027marker\u0027: {\u0027color\u0027: palette[0]}}\n        else:\n            t = {\u0027type\u0027: kind, \u0027labels\u0027: names, \u0027values\u0027: amounts}\n            parents = trace.pop(\u0027parents\u0027, None)\n            t[\u0027parents\u0027] = column(data, parents) if parents is not None else [\u0027\u0027] * len(names or [])\n        traces.append(t)\n    elif kind in (\u0027histogram\u0027,):\n        for i, (name, series) in enumerate(_ir_series(data, x if x is not None else y)):\n            traces.append({\u0027type\u0027: \u0027histogram\u0027, \u0027x\u0027: series, \u0027name\u0027: name, \u0027marker\u0027: {\u0027color\u0027: palette[i % len(palette)]}})\n    elif kind in (\u0027box\u0027, \u0027violin\u0027):\n        for i, (name, series) in enumerate(_ir_series(data, y if y is not None else x)):\n            traces.append({\u0027type\u0027: kind, \u0027y\u0027: series, \u0027name\u0027: name, \u0027marker\u0027: {\u0027color\u0027: palette[i % len(palette)]}})\n    elif kind == \u0027heatmap\u0027:\n        matrix = z\n        if isinstance(matrix, str):\n            matrix = column(data, matrix)\n        if matrix is None and data is not None:\n            matrix = data.values.tolist() if hasattr(data, \u0027values\u0027) and hasattr(data, \u0027columns\u0027) else data\n        t = {\u0027type\u0027: \u0027heatmap\u0027, \u0027z\u0027: _ir_plain(matrix), \u0027colorscale\u0027: trace.pop(\u0027colorscale\u0027, \u0027RdYlGn\u0027)}\n        if x is not None:\n            t[\u0027x\u0027] = column(data, x) if isinstance(x, str) else list(x)\n        elif hasattr(data, \u0027columns\u0027):\n            t[\u0027x\u0027] = [str(c) for c in data.columns]\n        if y is not None:\n            t[\u0027y\u0027] = column(data, y) if isinstance(y, str) else list(y)\n        traces.append(t)\n    elif kind == \u0027radar\u0027:\n        theta = column(data, labels if labels is not None else x)\n        for i, (name, series) in enumerate(_ir_series(data, values if values is not None else y)):\n            traces.append({\u0027type\u0027: \u0027scatterpolar\u0027, \u0027r\u0027: series \u002B series[:1], \u0027theta\u0027: theta \u002B theta[:1], \u0027fill\u0027: \u0027toself\u0027,\n                           \u0027name\u0027: name, \u0027line\u0027: {\u0027color\u0027: palette[i % len(palette)]}})\n    elif kind in (\u0027gauge\u0027, \u0027indicator\u0027):\n        amount = values if values is not None else y\n        amount = column(data, amount)[-1] if isinstance(amount, str) else amount\n        t = {\u0027type\u0027: \u0027indicator\u0027, \u0027value\u0027: amount, \u0027title\u0027: {\u0027text\u0027: title}}\n        if kind == \u0027gauge\u0027:\n            low = 0 if min is None else min\n            high = 100 if max is None else max\n            t[\u0027mode\u0027] = \u0027gauge\u002Bnumber\u0027\n            t[\u0027gauge\u0027] = {\u0027axis\u0027: {\u0027range\u0027: [low, high]}, \u0027bar\u0027: {\u0027color\u0027: palette[0]}}\n        else:\n            t[\u0027mode\u0027] = \u0027number\u0027\n        traces.append(t)\n        title = \u0027\u0027\n    elif kind == \u0027candlestick\u0027:\n        t = {\u0027type\u0027: \u0027candlestick\u0027, \u0027x\u0027: column(data, x)}\n        for part in (\u0027open\u0027, \u0027high\u0027, \u0027low\u0027, \u0027close\u0027):\n            t[part] = column(data, trace.pop(part, part))\n        traces.append(t)\n    elif kind == \u0027waterfall\u0027:\n        traces.append({\u0027type\u0027: \u0027waterfall\u0027, \u0027x\u0027: column(data, x), \u0027y\u0027: column(data, y)})\n    else:\n        xs = column(data, x)\n        for i, (name, series) in enumerate(_ir_series(data, y)):\n            color = palette[i % len(palette)]\n            if kind in (\u0027bar\u0027, \u0027barh\u0027, \u0027stacked_bar\u0027):\n                t = {\u0027type\u0027: \u0027bar\u0027, \u0027name\u0027: name, \u0027marker\u0027: {\u0027color\u0027: color}}\n                if kind == \u0027barh\u0027:\n                    t.update({\u0027orientation\u0027: \u0027h\u0027, \u0027x\u0027: series, \u0027y\u0027: xs})\n                else:\n                    t.update({\u0027x\u0027: xs, \u0027y\u0027: series})\n            elif kind in (\u0027scatter\u0027, \u0027bubble\u0027):\n                t = {\u0027type\u0027: \u0027scatter\u0027, \u0027mode\u0027: \u0027markers\u0027, \u0027x\u0027: xs, \u0027y\u0027: series, \u0027name\u0027: name, \u0027marker\u0027: {\u0027color\u0027: color}}\n                if size is not None:\n                    sizes = column(data, size)\n                    # min and max are parameters here, so the builtin is reached by another name.\n                    top = float(_ir_builtin_max(sizes) if sizes else 1.0) or 1.0\n                    t[\u0027marker\u0027][\u0027size\u0027] = [6 \u002B 40 * float(s) / top for s in sizes]\n            else:\n                t = {\u0027type\u0027: \u0027scatter\u0027, \u0027mode\u0027: \u0027lines\u002Bmarkers\u0027 if kind == \u0027line\u0027 else \u0027lines\u0027, \u0027x\u0027: xs, \u0027y\u0027: series,\n                     \u0027name\u0027: name, \u0027line\u0027: {\u0027color\u0027: color}}\n                if kind == \u0027area\u0027:\n                    t[\u0027fill\u0027] = \u0027tonexty\u0027 if stacked and i else \u0027tozeroy\u0027\n                    if stacked:\n                        t[\u0027stackgroup\u0027] = \u0027one\u0027\n            if text is not None:\n                t[\u0027text\u0027] = column(data, text)\n            traces.append(t)\n\n    for t in traces:\n        t.update(trace)\n    spec_layout = {\n        \u0027title\u0027: {\u0027text\u0027: title} if title else None,\n        \u0027height\u0027: height,\n        \u0027margin\u0027: {\u0027l\u0027: 50, \u0027r\u0027: 20, \u0027t\u0027: 50 if title else 20, \u0027b\u0027: 40},\n        \u0027showlegend\u0027: bool(legend) and len(traces) \u003E 1 or (legend and kind in (\u0027pie\u0027, \u0027donut\u0027)),\n        \u0027barmode\u0027: \u0027stack\u0027 if stacked or kind == \u0027stacked_bar\u0027 else \u0027group\u0027,\n        \u0027xaxis\u0027: {\u0027title\u0027: {\u0027text\u0027: x_title}} if x_title else {},\n        \u0027yaxis\u0027: {\u0027title\u0027: {\u0027text\u0027: y_title}} if y_title else {},\n        \u0027paper_bgcolor\u0027: \u0027rgba(0,0,0,0)\u0027, \u0027plot_bgcolor\u0027: \u0027rgba(0,0,0,0)\u0027,\n    }\n    if layout:\n        spec_layout.update(layout)\n    return plotly({\u0027data\u0027: traces, \u0027layout\u0027: {k: v for k, v in spec_layout.items() if v is not None}}, height=height, id=id)\n\n\ndef _ir_builtin_max(values):\n    import builtins\n    return builtins.max(values)\n\n\ndef plotly(figure, height=None, id=None, config=None):\n    \u0022\u0022\u0022Any Plotly figure: a plotly.graph_objects Figure or a {\u0027data\u0027: [...], \u0027layout\u0027: {...}} dictionary.\u0022\u0022\u0022\n    spec = figure.to_plotly_json() if hasattr(figure, \u0027to_plotly_json\u0027) else dict(figure)\n    spec.setdefault(\u0027layout\u0027, {})\n    if height:\n        spec[\u0027layout\u0027].setdefault(\u0027height\u0027, height)\n    spec[\u0027config\u0027] = dict({\u0027displaylogo\u0027: False, \u0027responsive\u0027: True}, **(config or {}))\n    box_height = spec[\u0027layout\u0027].get(\u0027height\u0027) or 360\n    return Html(\u0027\u003Cdiv %s\u003E\u003Cscript type=\u0022application/json\u0022\u003E%s\u003C/script\u003E\u003C/div\u003E\u0027 % (_ir_attrs(\n        id=id or _ir_next_id(\u0027chart\u0027), class_=\u0027cn-chart\u0027, data_cn_chart=\u00271\u0027, data_cn_opaque=\u00271\u0027,\n        style=\u0027min-height:%dpx\u0027 % box_height), _ir_json_block(spec)))\n\n\ndef figure(fig, width=None, dpi=110):\n    \u0022\u0022\u0022A matplotlib figure, as a picture.\u0022\u0022\u0022\n    buffer = _ir_io.BytesIO()\n    fig.savefig(buffer, format=\u0027png\u0027, bbox_inches=\u0027tight\u0027, dpi=dpi)\n    try:\n        import matplotlib.pyplot as plt\n        plt.close(fig)\n    except Exception:\n        pass\n    return image(buffer.getvalue(), width=width)\n\n\ndef image(source, width=None, alt=\u0027\u0027):\n    \u0022\u0022\u0022A picture: bytes, a file path, or a URL.\u0022\u0022\u0022\n    if isinstance(source, (bytes, bytearray)):\n        kind = \u0027jpeg\u0027 if bytes(source[:3]) == b\u0027\\xff\\xd8\\xff\u0027 else \u0027png\u0027\n        src = \u0027data:image/%s;base64,%s\u0027 % (kind, _ir_base64.b64encode(bytes(source)).decode(\u0027ascii\u0027))\n    elif isinstance(source, str) and _ir_os.path.isfile(source):\n        extension = _ir_os.path.splitext(source)[1].lower().lstrip(\u0027.\u0027) or \u0027png\u0027\n        mime = {\u0027jpg\u0027: \u0027jpeg\u0027, \u0027svg\u0027: \u0027svg\u002Bxml\u0027}.get(extension, extension)\n        with open(source, \u0027rb\u0027) as handle:\n            src = \u0027data:image/%s;base64,%s\u0027 % (mime, _ir_base64.b64encode(handle.read()).decode(\u0027ascii\u0027))\n    else:\n        src = str(source)\n    style = \u0027width:%s\u0027 % (width if isinstance(width, str) else \u0027%dpx\u0027 % width) if width else None\n    return Html(\u0027\u003Cimg %s/\u003E\u0027 % _ir_attrs(class_=\u0027cn-image\u0027, src=src, alt=alt, style=style))\n\n\n_IR_DEFAULT_SCALE = [\u0027#d73027\u0027, \u0027#fc8d59\u0027, \u0027#fee08b\u0027, \u0027#91cf60\u0027, \u0027#1a9850\u0027]\n\n\ndef color_bar(value, min=0, max=100, colors=None, label=None, show_value=True, format=None, height=14, ticks=True):\n    \u0022\u0022\u0022A colour scale with a marker at the value \u2014 red to green by default.\u0022\u0022\u0022\n    scale = list(colors) if colors else _IR_DEFAULT_SCALE\n    try:\n        position = (float(value) - float(min)) / (float(max) - float(min)) * 100.0\n    except (TypeError, ValueError, ZeroDivisionError):\n        position = 0.0\n    position = 0.0 if position != position else position\n    position = 0.0 if position \u003C 0 else 100.0 if position \u003E 100 else position\n    gradient = \u0027linear-gradient(to right, %s)\u0027 % \u0027, \u0027.join(scale)\n    caption = \u0027\u003Cdiv class=\u0022cn-label\u0022\u003E%s%s\u003C/div\u003E\u0027 % (\n        esc(label or \u0027\u0027), (\u0027 \u003Cb\u003E%s\u003C/b\u003E\u0027 % esc(fmt(value, format) if format else _ir_number(float(value)) if isinstance(value, (int, float)) else value)) if show_value else \u0027\u0027)\n    marks = (\u0027\u003Cdiv class=\u0022cn-colorbar-ticks\u0022\u003E\u003Cspan\u003E%s\u003C/span\u003E\u003Cspan\u003E%s\u003C/span\u003E\u003C/div\u003E\u0027 % (esc(min), esc(max))) if ticks else \u0027\u0027\n    return Html(\u0027\u003Cdiv class=\u0022cn-colorbar cn-field\u0022\u003E%s\u003Cdiv class=\u0022cn-colorbar-track\u0022 style=\u0022height:%dpx;background:%s\u0022\u003E\u0027\n                \u0027\u003Cdiv class=\u0022cn-colorbar-marker\u0022 style=\u0022left:%.2f%%\u0022\u003E\u003C/div\u003E\u003C/div\u003E%s\u003C/div\u003E\u0027\n                % (caption, height, gradient, position, marks))\n\n\ndef progress(value, max=100, label=None, color=None, format=None):\n    \u0022\u0022\u0022A progress bar.\u0022\u0022\u0022\n    try:\n        share = float(value) / float(max) * 100.0\n    except (TypeError, ValueError, ZeroDivisionError):\n        share = 0.0\n    share = 0.0 if share \u003C 0 else 100.0 if share \u003E 100 else share\n    style = \u0027width:%.2f%%%s\u0027 % (share, \u0027;background:%s\u0027 % color if color else \u0027\u0027)\n    caption = \u0027\u003Cdiv class=\u0022cn-label\u0022\u003E%s \u003Cb\u003E%s\u003C/b\u003E\u003C/div\u003E\u0027 % (esc(label or \u0027\u0027), esc(fmt(value, format) if format else \u0027%.0f%%\u0027 % share))\n    return Html(\u0027\u003Cdiv class=\u0022cn-progress cn-field\u0022\u003E%s\u003Cdiv class=\u0022cn-progress-track\u0022\u003E\u003Cdiv class=\u0022cn-progress-fill\u0022 style=\u0022%s\u0022\u003E\u003C/div\u003E\u003C/div\u003E\u003C/div\u003E\u0027\n                % (caption, style))\n\n\ndef kpi(label, value, delta=None, format=None, delta_format=None, good=\u0027up\u0027, color=None):\n    \u0022\u0022\u0022A headline figure with an optional change beside it.\u0022\u0022\u0022\n    shown = fmt(value, format) if format else (_ir_number(value) if isinstance(value, float) else value)\n    change = \u0027\u0027\n    if delta is not None:\n        try:\n            positive = float(delta) \u003E= 0\n        except (TypeError, ValueError):\n            positive = True\n        tone = \u0027cn-good\u0027 if positive == (good == \u0027up\u0027) else \u0027cn-bad\u0027\n        arrow = \u0027\u25B2\u0027 if positive else \u0027\u25BC\u0027\n        change = \u0027\u003Cdiv class=\u0022cn-kpi-delta %s\u0022\u003E%s %s\u003C/div\u003E\u0027 % (tone, arrow, esc(fmt(delta, delta_format) if delta_format else delta))\n    style = \u0027 style=\u0022border-top-color:%s\u0022\u0027 % esc(color) if color else \u0027\u0027\n    return Html(\u0027\u003Cdiv class=\u0022cn-kpi\u0022%s\u003E\u003Cdiv class=\u0022cn-kpi-label\u0022\u003E%s\u003C/div\u003E\u003Cdiv class=\u0022cn-kpi-value\u0022\u003E%s\u003C/div\u003E%s\u003C/div\u003E\u0027\n                % (style, esc(label), esc(shown), change))\n\n\ndef badge(text, color=\u0027#3366cc\u0027):\n    \u0022\u0022\u0022A small coloured label.\u0022\u0022\u0022\n    return Html(\u0027\u003Cspan class=\u0022cn-badge\u0022 style=\u0022background:%s\u0022\u003E%s\u003C/span\u003E\u0027 % (esc(color), esc(text)))\n",
+        "codeFile": "",
+        "maxInputNumber": 3,
+        "maxOutputNumber": 1,
+        "documentationText": "",
+        "documentationFile": "ScenariuszeKosztowe.md",
+        "nodeCathegory": 29,
+        "id": 9,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 3,
+          "outputNumber": 1,
+          "inputParametersEditorEnabled": true,
+          "outputParametersEditorEnabled": true,
+          "selectedInputConnectionSettings": {
+            "id": 15,
+            "title": "engine",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [
+            {
+              "id": 15,
+              "title": "engine",
+              "connecttionType": 0
+            },
+            {
+              "id": 16,
+              "title": "advisor",
+              "connecttionType": 0
+            },
+            {
+              "id": 17,
+              "title": "formatter",
+              "connecttionType": 0
+            }
+          ],
+          "selectedOutputConnectionSettings": {
+            "id": 18,
+            "title": "show",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [
+            {
+              "id": 18,
+              "title": "show",
+              "connecttionType": 0
+            }
+          ],
+          "description": "ScenariuszeKosztowe",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "{\u0022ClassName\u0022:\u0022ScenariuszeKosztowe\u0022,\u0022Title\u0022:\u0022Co je\\u015Bli zdro\\u017Cej\\u0105 surowce?\u0022,\u0022Inputs\u0022:[\u0022engine\u0022,\u0022advisor\u0022,\u0022formatter\u0022],\u0022Height\u0022:1700,\u0022KeepAlive\u0022:true,\u0022Markup\u0022:\u0022\\u003Cdiv class=\\u0022cn-page\\u0022\\u003E\\n  \\u003Ch1\\u003ECo si\\u0119 stanie, je\\u015Bli zdro\\u017Cej\\u0105 surowce?\\u003C/h1\\u003E\\n  \\u003Cp class=\\u0022cn-muted\\u0022\\u003E{source_note} \\u00B7 BOM (CSV) \\u002B produkty (Excel) \\u002B ceny surowc\\u00F3w i koszty sta\\u0142e (JSON) \\u2192 Data Scan \\u2192 model kosztowy \\u2192 scenariusze\\u003C/p\\u003E\\n\\n  \\u003Cdiv class=\\u0022cn-card\\u0022\\u003E\\n    \\u003Cdiv class=\\u0022cn-row\\u0022\\u003E\\n      {select(\\u0022resource\\u0022, resource_options, label=\\u0022Surowiec\\u0022)}\\n      {slider(\\u0022shock\\u0022, -20, 60, step=1, label=\\u0022Zmiana ceny surowca %\\u0022)}\\n      {slider(\\u0022pass_through\\u0022, 0, 100, step=5, label=\\u0022Przerzucenie na ceny %\\u0022)}\\n      {slider(\\u0022volume\\u0022, -30, 20, step=1, label=\\u0022Zmiana wolumenu %\\u0022)}\\n    \\u003C/div\\u003E\\n  \\u003C/div\\u003E\\n\\n  \\u003Cdiv class=\\u0022cn-grid-4\\u0022\\u003E\\n    {self._kpi(\\u0022EBITDA \\u2014 \\u0022 \\u002B r.scenario.name, f.short_zl(r.ebitda), f.short_zl(r.ebitda - base.ebitda) \\u002B \\u0022 vs BASE\\u0022, r.ebitda - base.ebitda)}\\n    {self._kpi(\\u0022Mar\\u017Ca EBITDA\\u0022, f.pct(r.ebitda_margin), f.pp(r.ebitda_margin - base.ebitda_margin), r.ebitda_margin - base.ebitda_margin)}\\n    {self._kpi(\\u0022Pr\\u00F3g rentowno\\u015Bci (przych\\u00F3d)\\u0022, f.short_zl(r.break_even_revenue), f.short_zl(r.break_even_revenue - base.break_even_revenue), r.break_even_revenue - base.break_even_revenue, good_up=False)}\\n    {self._kpi(\\u0022Produkty zagro\\u017Cone\\u0022, str(risk_count) \\u002B \\u0022 z \\u0022 \\u002B str(len(r.products)), \\u0022mar\\u017Ca pokrycia \\u003C 5%\\u0022 if risk_count else \\u0022brak\\u0022, -risk_count)}\\n  \\u003C/div\\u003E\\n\\n  \\u003Cdiv class=\\u0022cn-grid-2\\u0022\\u003E\\n    \\u003Cdiv class=\\u0022cn-card answer\\u0022\\u003E\\n      \\u003Ch3\\u003EOdpowied\\u017A\\u003C/h3\\u003E\\n      {findings_html}\\n    \\u003C/div\\u003E\\n    \\u003Cdiv class=\\u0022cn-card\\u0022\\u003E\\n      \\u003Ch3\\u003EDrabina scenariuszy: {resource_name}\\u003C/h3\\u003E\\n      {ladder_chart}\\n    \\u003C/div\\u003E\\n  \\u003C/div\\u003E\\n\\n  \\u003Cdiv class=\\u0022cn-grid-2\\u0022\\u003E\\n    \\u003Cdiv class=\\u0022cn-card\\u0022\\u003E\\u003Ch3\\u003EKt\\u00F3ry surowiec boli najbardziej? (\\u002B10% ceny)\\u003C/h3\\u003E{tornado_chart}\\u003C/div\\u003E\\n    \\u003Cdiv class=\\u0022cn-card\\u0022\\u003E\\u003Ch3\\u003EMar\\u017Ca pokrycia produkt\\u00F3w: przed i po\\u003C/h3\\u003E{margin_chart}\\u003C/div\\u003E\\n  \\u003C/div\\u003E\\n\\n  \\u003Cdiv class=\\u0022cn-card\\u0022\\u003E\\n    \\u003Ch3\\u003EProdukty w scenariuszu \\u2014 od najs\\u0142abszej mar\\u017Cy\\u003C/h3\\u003E\\n    {table(product_rows, page_size=10, id=\\u0022products\\u0022)}\\n  \\u003C/div\\u003E\\n\\n  \\u003Cdiv class=\\u0022cn-grid-2\\u0022\\u003E\\n    \\u003Cdiv class=\\u0022cn-card\\u0022\\u003E\\u003Ch3\\u003EStruktura koszt\\u00F3w (BASE, rocznie)\\u003C/h3\\u003E{structure_chart}\\u003C/div\\u003E\\n    \\u003Cdiv class=\\u0022cn-card\\u0022\\u003E\\n      \\u003Ch3\\u003EData Scan \\u2014 co CatNip rozpozna\\u0142 w danych\\u003C/h3\\u003E\\n      \\u003Cpre class=\\u0022scan\\u0022\\u003E{scan_tree}\\u003C/pre\\u003E\\n      \\u003Cp\\u003E\\u003Cb\\u003EPowi\\u0105zania wykryte automatycznie\\u003C/b\\u003E\\u003C/p\\u003E\\n      {relations_html}\\n      {table(pipeline_rows, filter=False, sortable=False, id=\\u0022pipeline\\u0022)}\\n    \\u003C/div\\u003E\\n  \\u003C/div\\u003E\\n\\u003C/div\\u003E\\n\u0022,\u0022Code\u0022:\u0022def setup(self):\\n    ids = [rid for rid, _ in self.engine.resource_options()]\\n    self.set(\\u0022resource\\u0022, \\u0022R-AL\\u0022 if \\u0022R-AL\\u0022 in ids else ids[0])\\n    self.set(\\u0022shock\\u0022, 15)\\n    self.set(\\u0022pass_through\\u0022, 0)\\n    self.set(\\u0022volume\\u0022, 0)\\n\\ndef prepare(self):\\n    e = self.engine\\n    f = self.formatter\\n    resource = self.get(\\u0022resource\\u0022)\\n    shock = float(self.get(\\u0022shock\\u0022))\\n    pass_through = float(self.get(\\u0022pass_through\\u0022))\\n    volume = float(self.get(\\u0022volume\\u0022))\\n    base = e.base()\\n    result = e.shock(resource, shock, pass_through, volume)\\n    ladder = e.ladder(resource, pass_through, volume, shocks=sorted({0.0, 10.0, 15.0, 25.0, shock}))\\n    scan = e.model.scan\\n    return {\\n        \\u0022f\\u0022: f,\\n        \\u0022base\\u0022: base,\\n        \\u0022r\\u0022: result,\\n        \\u0022resource_name\\u0022: e.resource_names[resource],\\n        \\u0022resource_options\\u0022: e.resource_options(),\\n        \\u0022findings_html\\u0022: html(\\u0022\\u003Cul\\u003E%s\\u003C/ul\\u003E\\u0022 % \\u0022\\u0022.join(\\u0022\\u003Cli\\u003E%s\\u003C/li\\u003E\\u0022 % esc(line) for line in self.advisor.findings(e, base, result, resource))),\\n        \\u0022ladder_chart\\u0022: self._ladder_chart(ladder, resource, shock),\\n        \\u0022tornado_chart\\u0022: self._tornado_chart(e.sensitivity(10.0)),\\n        \\u0022margin_chart\\u0022: self._margin_chart(result),\\n        \\u0022structure_chart\\u0022: chart(\\u0022donut\\u0022, [{\\u0022Pozycja\\u0022: k, \\u0022z\\u0142\\u0022: round(v)} for k, v in e.cost_structure().items()], labels=\\u0022Pozycja\\u0022, values=\\u0022z\\u0142\\u0022, height=320),\\n        \\u0022product_rows\\u0022: self._product_rows(result),\\n        \\u0022risk_count\\u0022: len(result.at_risk()),\\n        \\u0022scan_tree\\u0022: scan.tree_text(),\\n        \\u0022relations_html\\u0022: html(\\u0022\\u003Cul\\u003E%s\\u003C/ul\\u003E\\u0022 % \\u0022\\u0022.join(\\u0022\\u003Cli\\u003E%s\\u003C/li\\u003E\\u0022 % esc(r) for r in scan.relations())),\\n        \\u0022pipeline_rows\\u0022: scan.pipeline_rows(),\\n        \\u0022source_note\\u0022: \\u0022dane demonstracyjne wygenerowane przed chwil\\u0105 w input/\\u0022 if e.model.demo else \\u0022dane z folderu input/\\u0022,\\n    }\\n\\ndef _ladder_chart(self, ladder, resource, chosen):\\n    f = self.formatter\\n    shocks = [r.scenario.shocks.get(resource, 0.0) for r in ladder]\\n    names = [\\u0022BASE\\u0022 if not s else \\u0022%\\u002Bg%%\\u0022 % s for s in shocks]\\n    colors = [\\u0022#3366cc\\u0022 if not s else (\\u0022#c0392b\\u0022 if s == chosen else \\u0022#f0ad4e\\u0022) for s in shocks]\\n    trace = {\\u0022type\\u0022: \\u0022bar\\u0022, \\u0022x\\u0022: names, \\u0022y\\u0022: [round(r.ebitda) for r in ladder], \\u0022marker\\u0022: {\\u0022color\\u0022: colors},\\n             \\u0022text\\u0022: [f.short_zl(r.ebitda) \\u002B \\u0022\\u003Cbr\\u003E\\u0022 \\u002B f.pct(r.ebitda_margin) for r in ladder], \\u0022textposition\\u0022: \\u0022outside\\u0022}\\n    layout = {\\u0022height\\u0022: 330, \\u0022margin\\u0022: {\\u0022l\\u0022: 60, \\u0022r\\u0022: 20, \\u0022t\\u0022: 30, \\u0022b\\u0022: 40}, \\u0022yaxis\\u0022: {\\u0022title\\u0022: {\\u0022text\\u0022: \\u0022EBITDA [z\\u0142]\\u0022}},\\n              \\u0022paper_bgcolor\\u0022: \\u0022rgba(0,0,0,0)\\u0022, \\u0022plot_bgcolor\\u0022: \\u0022rgba(0,0,0,0)\\u0022, \\u0022showlegend\\u0022: False}\\n    return plotly({\\u0022data\\u0022: [trace], \\u0022layout\\u0022: layout}, height=330)\\n\\ndef _tornado_chart(self, impact):\\n    f = self.formatter\\n    names = list(impact)[::-1]\\n    values = [round(impact[n]) for n in names]\\n    trace = {\\u0022type\\u0022: \\u0022bar\\u0022, \\u0022orientation\\u0022: \\u0022h\\u0022, \\u0022y\\u0022: names, \\u0022x\\u0022: values, \\u0022marker\\u0022: {\\u0022color\\u0022: \\u0022#d9534f\\u0022},\\n             \\u0022text\\u0022: [f.short_zl(v) for v in values], \\u0022textposition\\u0022: \\u0022auto\\u0022}\\n    layout = {\\u0022height\\u0022: 330, \\u0022margin\\u0022: {\\u0022l\\u0022: 160, \\u0022r\\u0022: 20, \\u0022t\\u0022: 30, \\u0022b\\u0022: 40}, \\u0022xaxis\\u0022: {\\u0022title\\u0022: {\\u0022text\\u0022: \\u0022zmiana EBITDA przy \\u002B10% ceny\\u0022}},\\n              \\u0022paper_bgcolor\\u0022: \\u0022rgba(0,0,0,0)\\u0022, \\u0022plot_bgcolor\\u0022: \\u0022rgba(0,0,0,0)\\u0022, \\u0022showlegend\\u0022: False}\\n    return plotly({\\u0022data\\u0022: [trace], \\u0022layout\\u0022: layout}, height=330)\\n\\ndef _margin_chart(self, result):\\n    rows = [{\\u0022Produkt\\u0022: p.name.split(\\u0022 (\\u0022)[0], \\u0022Przed\\u0022: round(p.base_margin_pct, 1), \\u0022Po\\u0022: round(p.margin_pct, 1)} for p in result.products]\\n    return chart(\\u0022bar\\u0022, rows, x=\\u0022Produkt\\u0022, y=[\\u0022Przed\\u0022, \\u0022Po\\u0022], height=330, y_title=\\u0022mar\\u017Ca pokrycia %\\u0022, colors=[\\u0022#3366cc\\u0022, \\u0022#d9534f\\u0022])\\n\\ndef _product_rows(self, result):\\n    return [{\\u0022Produkt\\u0022: p.name, \\u0022Cena\\u0022: round(p.price, 2), \\u0022Koszt jedn. przed\\u0022: round(p.base_unit_cost, 2),\\n             \\u0022Koszt jedn. po\\u0022: round(p.unit_cost, 2), \\u0022Mar\\u017Ca przed %\\u0022: round(p.base_margin_pct, 1),\\n             \\u0022Mar\\u017Ca po %\\u0022: round(p.margin_pct, 1), \\u0022Potrzebna podwy\\u017Cka %\\u0022: round(p.required_price_increase_pct, 1),\\n             \\u0022Wolumen\\u0022: round(p.volume), \\u0022Status\\u0022: p.status} for p in sorted(result.products, key=lambda p: p.margin_pct)]\\n\\ndef _kpi(self, label, value, delta=None, change=0.0, good_up=True):\\n    \\u0022\\u0022\\u0022Kafelek KPI: strza\\u0142ka i kolor bior\\u0105 si\\u0119 z liczby change, a opis zmiany (delta) jest ju\\u017C po polsku.\\u0022\\u0022\\u0022\\n    extra = \\u0022\\u0022\\n    if delta is not None:\\n        tone = \\u0022cn-good\\u0022 if (change \\u003E= 0) == good_up else \\u0022cn-bad\\u0022\\n        arrow = \\u0022\\u25B2\\u0022 if change \\u003E 0 else (\\u0022\\u25BC\\u0022 if change \\u003C 0 else \\u0022\\u2022\\u0022)\\n        extra = \\u0027\\u003Cdiv class=\\u0022cn-kpi-delta %s\\u0022\\u003E%s %s\\u003C/div\\u003E\\u0027 % (tone, arrow, esc(delta))\\n    return html(\\u0027\\u003Cdiv class=\\u0022cn-kpi\\u0022\\u003E\\u003Cdiv class=\\u0022cn-kpi-label\\u0022\\u003E%s\\u003C/div\\u003E\\u003Cdiv class=\\u0022cn-kpi-value\\u0022\\u003E%s\\u003C/div\\u003E%s\\u003C/div\\u003E\\u0027\\n                % (esc(label), esc(value), extra))\\n\u0022,\u0022Style\u0022:\u0022.cn-page h1 { margin-bottom: 2px; }\\n.cn-card h3 { margin-top: 0; }\\n.answer .headline { font-size: 1.15em; font-weight: 600; }\\n.answer ol, .answer ul { margin-top: 4px; padding-left: 22px; }\\n.answer li { margin: 3px 0; }\\npre.scan { font-size: 0.82em; line-height: 1.35; max-height: 420px; overflow: auto; background: rgba(127,127,127,0.08); padding: 10px; border-radius: 6px; }\\n.cn-kpi-value { font-size: 1.35em; }\\n.flag { display: inline-block; padding: 1px 6px; margin: 1px; border-radius: 4px; font-size: 0.85em; background: rgba(220,57,18,0.12); }\\n\u0022,\u0022SampleData\u0022:\u0022\u0022,\u0022Actions\u0022:[]}",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 29,
+        "title": "ScenariuszeKosztowe",
+        "targetPath": ""
+      },
+      "locationX": 1050,
+      "locationY": 250
+    },
+    {
+      "nodeData": {
+        "codeText": "#\u003Cblocks_def\u003E\nfrom ProjectFolders import ProjectFolders\nfrom TableReader import TableReader\nfrom DataScanner import DataScanner\nfrom DemoCostData import DemoCostData\nfrom CostModelLoader import CostModelLoader\nfrom ScenarioEngine import ScenarioEngine\nfrom PlnFormat import PlnFormat\nfrom ScenarioAdvisor import ScenarioAdvisor\nfrom ScenariuszeKosztowe import ScenariuszeKosztowe\n#\u003Cend_of_block_defs\u003E\n\ndef main():\n#\u003Cblocks_call\u003E\n\tfolders = ProjectFolders()\n\tdata_1 = folders.folders()\n\treader = TableReader()\n\tdata_2 = reader.reader()\n\tscanner = DataScanner()\n\tdata_3 = scanner.scanner()\n\tgenerator = DemoCostData()\n\tdata_4 = generator.generator()\n\tmodel = CostModelLoader(data_1, data_2, data_4, data_3)\n\tdata_5 = model.model()\n\tengine = ScenarioEngine(data_5)\n\tdata_6 = engine.engine()\n\tformatter = PlnFormat()\n\tdata_7 = formatter.formatter()\n\tadvisor = ScenarioAdvisor(data_7)\n\tdata_8 = advisor.advisor()\n\tresult = ScenariuszeKosztowe(data_6, data_8, data_7)\n\tresult.show()\n#\u003Cend_of_block_calls\u003E\n\tpass\n\nif __name__ == \u0022__main__\u0022:\n\tmain()\n",
+        "codeFile": "",
+        "maxInputNumber": 1,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "Main.md",
+        "nodeCathegory": 3,
+        "id": 10,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 1,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": true,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 19,
+            "title": "result",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [
+            {
+              "id": 19,
+              "title": "result",
+              "connecttionType": 0
+            }
+          ],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "Main",
+          "isMain": true,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "Main",
+        "targetPath": ""
+      },
+      "locationX": 1400,
+      "locationY": 250
+    },
+    {
+      "nodeData": {
+        "codeText": "from dataclasses import dataclass\n\n\n@dataclass\nclass ColumnProfile:\n    \u0022\u0022\u0022Jedna kolumna tabeli, tak jak zobaczy\u0142 j\u0105 Data Scan.\u0022\u0022\u0022\n\n    name: str\n    type_name: str\n    null_pct: float\n    distinct: int\n    example: str\n    is_key: bool = False\n    references: str = \u0022\u0022\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "ColumnProfile.md",
+        "nodeCathegory": 3,
+        "id": 11,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "ColumnProfile",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "ColumnProfile",
+        "targetPath": ""
+      },
+      "locationX": 0,
+      "locationY": 700
+    },
+    {
+      "nodeData": {
+        "codeText": "from dataclasses import dataclass, field\nfrom typing import List\n\nfrom ColumnProfile import ColumnProfile\n\n\n@dataclass\nclass TableProfile:\n    \u0022\u0022\u0022Jeden plik \u017Ar\u00F3d\u0142owy: format, liczba wierszy i profile kolumn.\u0022\u0022\u0022\n\n    name: str\n    source_format: str\n    rows: int\n    columns: List[ColumnProfile] = field(default_factory=list)\n\n    def key(self) -\u003E str:\n        keys = [c.name for c in self.columns if c.is_key]\n        return keys[0] if keys else \u0022\u0022\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "TableProfile.md",
+        "nodeCathegory": 3,
+        "id": 12,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "TableProfile",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "TableProfile",
+        "targetPath": ""
+      },
+      "locationX": 200,
+      "locationY": 700
+    },
+    {
+      "nodeData": {
+        "codeText": "from dataclasses import dataclass\n\n\n@dataclass\nclass PipelineStep:\n    \u0022\u0022\u0022Jeden krok przetwarzania: co zrobiono, na czym i ile to trwa\u0142o.\u0022\u0022\u0022\n\n    name: str\n    detail: str\n    seconds: float\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "PipelineStep.md",
+        "nodeCathegory": 3,
+        "id": 13,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "PipelineStep",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "PipelineStep",
+        "targetPath": ""
+      },
+      "locationX": 400,
+      "locationY": 700
+    },
+    {
+      "nodeData": {
+        "codeText": "from dataclasses import dataclass, field\nfrom typing import Dict, List\n\nfrom PipelineStep import PipelineStep\nfrom TableProfile import TableProfile\n\n\n@dataclass\nclass DataScan:\n    \u0022\u0022\u0022Wynik Data Scan: rozpoznane tabele, typy kolumn, klucze, powi\u0105zania i kroki przetwarzania.\u0022\u0022\u0022\n\n    tables: List[TableProfile] = field(default_factory=list)\n    pipeline: List[PipelineStep] = field(default_factory=list)\n\n    def total_rows(self) -\u003E int:\n        return sum(t.rows for t in self.tables)\n\n    def relations(self) -\u003E List[str]:\n        return [\u0022%s.%s \u2192 %s\u0022 % (t.name, c.name, c.references) for t in self.tables for c in t.columns if c.references]\n\n    def tree_text(self) -\u003E str:\n        lines = []\n        for table in self.tables:\n            lines.append(\u0022%s  [%s, %s wierszy]\u0022 % (table.name, table.source_format, format(table.rows, \u0022,\u0022).replace(\u0022,\u0022, \u0022 \u0022)))\n            width = max([len(c.name) for c in table.columns] \u002B [4])\n            for index, column in enumerate(table.columns):\n                branch = \u0022\u2514\u2500\u0022 if index == len(table.columns) - 1 else \u0022\u251C\u2500\u0022\n                notes = []\n                if column.is_key:\n                    notes.append(\u0022klucz\u0022)\n                if column.references:\n                    notes.append(\u0022\u2192 \u0022 \u002B column.references)\n                if column.null_pct \u003E 0:\n                    notes.append(\u0022braki %.1f%%\u0022 % column.null_pct)\n                suffix = (\u0022  (\u0022 \u002B \u0022, \u0022.join(notes) \u002B \u0022)\u0022) if notes else \u0022\u0022\n                lines.append(\u0022 %s %s \u2192 %s%s\u0022 % (branch, column.name.ljust(width), column.type_name.ljust(8), suffix))\n            lines.append(\u0022\u0022)\n        return \u0022\\n\u0022.join(lines).rstrip()\n\n    def column_rows(self) -\u003E List[Dict[str, object]]:\n        return [{\u0022Plik\u0022: t.name, \u0022Kolumna\u0022: c.name, \u0022Typ\u0022: c.type_name, \u0022Unikalne\u0022: c.distinct,\n                 \u0022Braki %\u0022: round(c.null_pct, 1), \u0022Przyk\u0142ad\u0022: c.example,\n                 \u0022Rola\u0022: \u0022klucz\u0022 if c.is_key else (\u0022\u2192 \u0022 \u002B c.references if c.references else \u0022\u0022)}\n                for t in self.tables for c in t.columns]\n\n    def pipeline_rows(self) -\u003E List[Dict[str, object]]:\n        return [{\u0022Krok\u0022: s.name, \u0022Co\u0022: s.detail, \u0022Czas [s]\u0022: round(s.seconds, 2)} for s in self.pipeline]\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "DataScan.md",
+        "nodeCathegory": 3,
+        "id": 14,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "DataScan",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "DataScan",
+        "targetPath": ""
+      },
+      "locationX": 600,
+      "locationY": 700
+    },
+    {
+      "nodeData": {
+        "codeText": "from dataclasses import dataclass\n\nimport pandas as pd\n\nfrom DataScan import DataScan\n\n\n@dataclass\nclass CostModel:\n    \u0022\u0022\u0022Model kosztowy firmy: produkty, receptury (BOM), ceny surowc\u00F3w, koszty sta\u0142e i wynik Data Scan.\u0022\u0022\u0022\n\n    products: pd.DataFrame\n    bom: pd.DataFrame\n    resources: pd.DataFrame\n    overheads: pd.DataFrame\n    scan: DataScan\n    demo: bool = False\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "CostModel.md",
+        "nodeCathegory": 3,
+        "id": 15,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "CostModel",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "CostModel",
+        "targetPath": ""
+      },
+      "locationX": 800,
+      "locationY": 700
+    },
+    {
+      "nodeData": {
+        "codeText": "from dataclasses import dataclass, field\nfrom typing import Dict\n\n\n@dataclass\nclass Scenario:\n    \u0022\u0022\u0022Za\u0142o\u017Cenia scenariusza: zmiany cen surowc\u00F3w (%), jak\u0105 cz\u0119\u015B\u0107 wzrostu kosztu przerzucamy na ceny, zmiana wolumenu.\u0022\u0022\u0022\n\n    name: str\n    shocks: Dict[str, float] = field(default_factory=dict)\n    pass_through_pct: float = 0.0\n    volume_change_pct: float = 0.0\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "Scenario.md",
+        "nodeCathegory": 3,
+        "id": 16,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "Scenario",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "Scenario",
+        "targetPath": ""
+      },
+      "locationX": 0,
+      "locationY": 850
+    },
+    {
+      "nodeData": {
+        "codeText": "from dataclasses import dataclass\n\n\n@dataclass\nclass ProductResult:\n    \u0022\u0022\u0022Jeden produkt w scenariuszu: cena, koszt jednostkowy, mar\u017Ca pokrycia przed i po zmianie.\u0022\u0022\u0022\n\n    product_id: str\n    name: str\n    price: float\n    unit_cost: float\n    base_unit_cost: float\n    volume: float\n    base_margin_pct: float\n    margin_pct: float\n    contribution: float\n    required_price_increase_pct: float\n\n    AT_RISK_MARGIN_PCT = 5.0\n\n    @property\n    def status(self) -\u003E str:\n        if self.margin_pct \u003C 0:\n            return \u0022strata\u0022\n        if self.margin_pct \u003C self.AT_RISK_MARGIN_PCT:\n            return \u0022zagro\u017Cony\u0022\n        return \u0022OK\u0022\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "ProductResult.md",
+        "nodeCathegory": 3,
+        "id": 17,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "ProductResult",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "ProductResult",
+        "targetPath": ""
+      },
+      "locationX": 200,
+      "locationY": 850
+    },
+    {
+      "nodeData": {
+        "codeText": "from dataclasses import dataclass, field\nfrom typing import List\n\nfrom ProductResult import ProductResult\nfrom Scenario import Scenario\n\n\n@dataclass\nclass ScenarioResult:\n    \u0022\u0022\u0022Wynik firmy w jednym scenariuszu: przych\u00F3d, mar\u017Ca pokrycia, EBITDA, pr\u00F3g rentowno\u015Bci i produkty.\u0022\u0022\u0022\n\n    scenario: Scenario\n    revenue: float\n    variable_cost: float\n    fixed_costs: float\n    products: List[ProductResult] = field(default_factory=list)\n\n    @property\n    def contribution(self) -\u003E float:\n        return self.revenue - self.variable_cost\n\n    @property\n    def ebitda(self) -\u003E float:\n        return self.contribution - self.fixed_costs\n\n    @property\n    def ebitda_margin(self) -\u003E float:\n        return 100 * self.ebitda / self.revenue if self.revenue else 0.0\n\n    @property\n    def break_even_revenue(self) -\u003E float:\n        ratio = self.contribution / self.revenue if self.revenue else 0.0\n        return self.fixed_costs / ratio if ratio \u003E 0 else float(\u0022inf\u0022)\n\n    def at_risk(self) -\u003E List[ProductResult]:\n        return sorted([p for p in self.products if p.status != \u0022OK\u0022], key=lambda p: p.margin_pct)\n",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "ScenarioResult.md",
+        "nodeCathegory": 3,
+        "id": 18,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "ScenarioResult",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "Python",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 3,
+        "title": "ScenarioResult",
+        "targetPath": ""
+      },
+      "locationX": 400,
+      "locationY": 850
+    },
+    {
+      "nodeData": {
+        "codeText": "",
+        "codeFile": "",
+        "maxInputNumber": 0,
+        "maxOutputNumber": 0,
+        "documentationText": "",
+        "documentationFile": "README.md",
+        "nodeCathegory": 30,
+        "id": 19,
+        "settings": {
+          "objectifable": false,
+          "canBeMain": false,
+          "inputNumber": 0,
+          "outputNumber": 0,
+          "inputParametersEditorEnabled": false,
+          "outputParametersEditorEnabled": false,
+          "selectedInputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "inputConnectionSettings": [],
+          "selectedOutputConnectionSettings": {
+            "id": 0,
+            "title": "",
+            "connecttionType": 0
+          },
+          "outputConnectionSettings": [],
+          "description": "README",
+          "isMain": false,
+          "inObjectiveManner": false,
+          "shellType": "Local Shell (system Python)",
+          "sqlScriptType": "MSSQL",
+          "connectionString": "",
+          "inputConstructorRouting": {},
+          "setterMethodNames": {},
+          "outputInputDependencies": {},
+          "disabledInputs": [],
+          "aggregatePrevious": false,
+          "badgeText": "",
+          "badgeColor": "",
+          "fileFormat": "",
+          "reportDefinition": "",
+          "dataSchema": "",
+          "interactiveReport": "",
+          "nativeBuildTarget": "",
+          "runCompiled": false,
+          "sourceFolder": "",
+          "mappedFrom": ""
+        },
+        "nodeCategory": 30,
+        "title": "README",
+        "targetPath": ""
+      },
+      "locationX": -400,
+      "locationY": -200
+    }
+  ],
+  "connections": [
+    {
+      "sourceNodeId": 1,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 5,
+      "targetConnectorIndex": 0,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 2,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 5,
+      "targetConnectorIndex": 1,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 4,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 5,
+      "targetConnectorIndex": 2,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 3,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 5,
+      "targetConnectorIndex": 3,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 5,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 6,
+      "targetConnectorIndex": 0,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 7,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 8,
+      "targetConnectorIndex": 0,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 6,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 9,
+      "targetConnectorIndex": 0,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 8,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 9,
+      "targetConnectorIndex": 1,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 7,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 9,
+      "targetConnectorIndex": 2,
+      "isChosen": false
+    },
+    {
+      "sourceNodeId": 9,
+      "sourceConnectorIndex": 0,
+      "targetNodeId": 10,
+      "targetConnectorIndex": 0,
+      "isChosen": false
+    }
+  ],
+  "projectType": 0,
+  "preRunCommands": [],
+  "noRedundantCode": false,
+  "engineSettings": [
+    {
+      "name": "main_1",
+      "filePath": "C:\\Users\\Adam\\Documents\\CatNip Workspace\\ScenariuszeKosztowe\\main_1.py",
+      "isSelected": true,
+      "environmentId": "python:3.11-slim",
+      "runMode": "Code Run",
+      "timeoutSeconds": 600,
+      "memoryLimitMb": 1024,
+      "installMode": "Manual",
+      "manualPackages": "pandas numpy openpyxl",
+      "dockerImage": "python:3.11-slim",
+      "newDockerImageName": "",
+      "showImageParametersOnRun": false,
+      "runInstance": ""
+    }
+  ]
+}
